@@ -1,175 +1,291 @@
 # VisionDrive3D
 
-# BTL Computer Graphics — Bộ sinh ảnh tổng hợp cho AI
+**A 3D Rendering Pipeline for Synthetic Dataset Generation**
 
-Dự án môn **Đồ họa máy tính (Computer Graphics)**: xây dựng pipeline **render cảnh 3D** để tạo **ảnh tổng hợp** (synthetic images) phục vụ huấn luyện/đánh giá AI.
-
-> Thư mục làm việc chính: `BTL2/`
+[![GitHub Pages](https://img.shields.io/badge/GitHub%20Pages-Visit%20Project-blue?logo=github)](https://ben-cp.github.io/VisionDrive3D/)
 
 ---
 
-## Mục tiêu
+## 📋 Project Overview
 
-- Render các cảnh 3D có ánh sáng, camera, vật liệu cơ bản.
-- Hỗ trợ nạp mesh từ file (Giai đoạn 1: `.obj`).
-- Mở rộng dần để sinh dataset (nhiều góc nhìn, nhiều điều kiện ánh sáng, xuất ảnh + annotation nếu cần).
+**VisionDrive3D** is a Computer Graphics project that builds a comprehensive **3D rendering pipeline** for generating **synthetic images and annotated datasets**. The system is designed for AI training and evaluation, supporting various computer vision tasks including object detection, segmentation, and autonomous driving applications.
 
----
+### Key Features
 
-## Cấu trúc thư mục
+- **3D Rendering Engine**: Built with OpenGL for high-performance real-time rendering
+- **Camera Management**: Multiple preset cameras (nuScenes surround cameras) plus free-flying camera
+- **Traffic Simulation**: Dynamic traffic scenarios with multiple vehicle types
+- **Synthetic Dataset Generation**: Batch rendering with automatic annotation export (COCO, YOLO formats)
+- **Multi-format Export**: RGB images, depth maps, instance masks, and metadata
+- **Headless Mode**: Support for server-side rendering without GUI
+- **Real-time Preview**: Interactive viewer with scene management and overlay capabilities
+- **Scene Composition**: Support for complex scenes with buildings, roads, and traffic
 
-```
-BTL2/
-  libs/
-    buffer.py      # VAO, UManager (upload uniforms, textures)
-    shader.py      # Shader (compile/link GLSL)
-    transform.py   # Trackball + các hàm ma trận (identity, perspective, ...)
-    camera.py      # Camera (extends Trackball)
-    lighting.py    # LightingManager, Light, Material
-  phong.vert       # Phong shader (vertex)
-  phong.frag       # Phong shader (fragment)
-  mesh.py          # Mesh loader OBJ (pywavefront) + VAO setup
-  viewer.py        # GLFW viewer tối giản để chạy demo
-  car.obj          # (KHÔNG có sẵn) bạn tự tải/đặt vào đây để test
-```
+### Supported Output Formats
 
----
-
-## Quy ước kiến trúc (Design Pattern)
-
-Mọi đối tượng vẽ được (**drawable**) cần có:
-
-- **`setup(self)`**: khởi tạo OpenGL resources (shader, VAO/VBO/EBO, texture...).  
-  Hàm này **trả về `self`** để hỗ trợ method chaining.
-- **`draw(self, projection, view, model)`**: render đối tượng.
-
-Trong vòng lặp render, `viewer` sẽ gọi:
-
-```python
-drawable.draw(projection, view, None)
-```
-
-Vì vậy các drawable nên xử lý `model=None` (mặc định `identity()`).
+- **RGB Images**: High-quality synthetic photographs
+- **Depth Maps**: Per-pixel depth information (NumPy format)
+- **Instance Masks**: Per-object segmentation masks
+- **Annotations**: 
+  - COCO JSON format
+  - YOLO text format
+- **Metadata**: Scene configuration, camera parameters, and object information
 
 ---
 
-## Shader Phong (đang dùng)
+## 🛠️ Installation
 
-File: `BTL2/phong.vert`, `BTL2/phong.frag`
+### Prerequisites
 
-### Vertex attributes (bắt buộc)
+- Python 3.9 or higher
+- pip (Python package manager)
+- Virtual environment manager (venv is recommended)
 
-- location **0**: `position` (vec3)
-- location **1**: `normal` (vec3)
-- location **2**: `texcoord` (vec2)
-- location **3**: `color` (vec3)
-
-### Uniforms (LightingManager đang upload)
-
-`LightingManager(uma).setup_phong()` sẽ upload các uniform:
-
-- `projection` (mat4)
-- `modelview` (mat4)
-- `I_light` (mat3)
-- `light_pos` (vec3)
-- `K_materials` (mat3)
-- `shininess` (float)
-- `mode` (int)
-
----
-
-## Cài đặt môi trường
-
-### Yêu cầu hệ thống
-
-- Python **3.9+** (khuyến nghị 3.10+)
-- GPU/driver hỗ trợ **OpenGL 3.3+**
-
-### Cài package (Windows / PowerShell)
-
-Từ thư mục workspace:
+### Step 1: Clone the Repository
 
 ```bash
-pip install numpy glfw PyOpenGL PyOpenGL_accelerate opencv-python pywavefront
+git clone https://github.com/ben-cp/VisionDrive3D.git
+cd VisionDrive3D
 ```
 
-Ghi chú:
-- `opencv-python` đang cần vì `BTL2/libs/buffer.py` import `cv2` (dùng cho texture loader).
+### Step 2: Create a Virtual Environment
+
+**On Windows:**
+
+```bash
+python -m venv venv
+venv\Scripts\activate
+```
+
+**On macOS/Linux:**
+
+```bash
+python3 -m venv venv
+source venv/bin/activate
+```
+
+### Step 3: Upgrade pip
+
+```bash
+pip install --upgrade pip setuptools wheel
+```
+
+### Step 4: Install Dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+**Note:** Installing `torch` and `ultralytics` may take some time on first installation. For GPU support, refer to [PyTorch installation guide](https://pytorch.org/get-started/locally/).
+
+### Step 5: Verify Installation
+
+```bash
+python -c "import OpenGL; import glfw; import numpy; import torch; print('All dependencies installed successfully!')"
+```
 
 ---
 
-## Chạy demo Mesh Loader (Giai đoạn 1)
+## 🚀 Running the Project
 
-### 1) Chuẩn bị OBJ để test
+### 1. Interactive Viewer (GUI Mode)
 
-Đặt file `car.obj` vào **`BTL2/car.obj`**.
-
-### 2) Chạy viewer
+Start the real-time viewer with the default scene:
 
 ```bash
-cd BTL2
 python viewer.py
 ```
 
-### Controls (Viewer cơ bản)
+**Keyboard Controls:**
+- `WASD` - Move camera (in free-cam mode)
+- `Mouse` - Look around (disabled for trackball in other modes)
+- `Tab` - Switch between camera modes
+- `R` - Reset scene
+- `ESC` - Exit
 
-- **Mouse Left drag**: xoay (trackball)
-- **Mouse Right drag**: pan
-- **Mouse Wheel**: zoom
-- **W**: toggle `wireframe/point/fill`
-- **Q** hoặc **Esc**: thoát
+### 2. Batch Dataset Generation (Headless Mode)
 
----
+Generate a synthetic dataset with multiple renders:
 
-## Giai đoạn 1 — Mesh Loader (`OBJ`) (đã tích hợp)
+```bash
+python viewer.py --headless --output-dir ./output_dataset --num-frames 100
+```
 
-File chính:
+This generates:
+- RGB images in `output_dataset/images/`
+- Depth maps in `output_dataset/depth/`
+- Instance masks in `output_dataset/masks/`
+- Annotations in `output_dataset/labels/` (COCO & YOLO formats)
+- Metadata in `output_dataset/metadata/`
 
-- `BTL2/mesh.py`: class `Mesh(filename)`
-  - `setup()` đọc OBJ bằng `pywavefront`, tách mảng interleaved của `material.vertices`, tạo các buffer:
-    - `vertices (N,3)` → location 0
-    - `normals (N,3)` → location 1
-    - `texcoords (N,2)` → location 2 (nếu thiếu → zeros)
-    - `colors (N,3)` → location 3 (mặc định xám `[0.6,0.6,0.6]`)
-  - `draw()` upload `projection`, `modelview`, setup phong lighting, rồi `glDrawArrays(GL_TRIANGLES, ...)`.
+### 3. Scene Configuration & Assets
 
----
+Place your 3D models in the `assets/` directory:
 
-## Thêm một drawable mới (workflow chuẩn)
+```
+assets/
+├── car0/
+├── car1/
+├── car2/
+├── road_junction/
+└── scene/
+```
 
-1) Tạo file `BTL2/<object>.py` và class mới.
-2) Trong `setup()`:
-   - compile shader (hoặc dùng shader có sẵn)
-   - tạo `VAO()` và `add_vbo()` đúng các location attribute mà shader dùng
-3) Trong `draw()`:
-   - upload `projection`, `modelview` (và uniform khác nếu cần)
-   - bind VAO → draw → unbind
-4) Trong `viewer.py`:
-   - `obj = YourObject(...).setup()`
-   - `viewer.add(obj)`
+For each asset, prepare:
+- `.obj` or `.mtl` files for models
+- Texture files (PNG, JPG) in a `textures/` subdirectory
 
----
+### 4. AI Demonstration
 
-## Troubleshooting nhanh
+Run the AI inference demo to test object detection on rendered images:
 
-- **`ModuleNotFoundError: No module named 'OpenGL'`**  
-  Cài lại: `pip install PyOpenGL PyOpenGL_accelerate`
-
-- **Cửa sổ mở nhưng màn hình xám/đen**  
-  Kiểm tra:
-  - shader compile/link có lỗi (log sẽ in ra console)
-  - OBJ có dữ liệu vertex/normal không
-  - camera đang nhìn thấy object (thử zoom out)
-
-- **Thiếu file OBJ**  
-  `viewer.py` đang load `Mesh("car.obj")` theo đường dẫn tương đối trong `BTL2/`.
+```bash
+python src/ai_demo/ai_demo_runner.py --input-dir output_dataset/images/ --model yolo26n.pt
+```
 
 ---
 
-## Quy ước làm việc nhóm
+## 📁 Project Structure
 
-- **Không commit** các asset nặng nếu không cần (OBJ/texture lớn) — ưu tiên để link nguồn tải trong README hoặc `.gitignore` (nếu sau này dùng git).
-- Khi thêm shader mới, ghi rõ:
-  - attribute locations yêu cầu
-  - uniform names cần upload
-- Mọi module mới nên bám theo pattern `setup/draw` để `viewer` có thể dùng trực tiếp.
+```
+VisionDrive3D/BTL2/
+├── viewer.py                 # Main application & batch renderer
+├── entity.py                 # Scene graph & entity management
+├── scene_overlay.py          # Scene rendering system
+├── traffic.py                # Traffic simulation manager
+├── car.py                    # Vehicle models & animation
+├── renderers.py              # Rendering pipeline (Phong, depth, masks)
+├── camera_suite.py           # Camera management system
+├── mesh.py                   # 3D model loader (OBJ, MTL, textures)
+├── annotations.py            # Dataset annotation & export
+│
+├── libs/                     # Core graphics libraries
+│   ├── shader.py             # GLSL shader compiler
+│   ├── buffer.py             # VAO/VBO/EBO management
+│   ├── lighting.py           # Lighting & materials
+│   ├── transform.py          # Matrix operations & cameras
+│   └── camera.py             # Camera base classes
+│
+├── shaders/                  # GLSL shader files
+│   ├── phong.vert / phong.frag      # Phong lighting
+│   ├── depth.vert / depth.frag      # Depth rendering
+│   └── mask.vert / mask.frag        # Segmentation masks
+│
+├── src/
+│   ├── ai_demo/              # AI inference demonstrations
+│   ├── dataset/              # Dataset utilities
+│   └── vis/                  # Visualization tools
+│
+├── assets/                   # 3D models & textures
+├── output_dataset/           # Generated synthetic data
+├── outputs/                  # Temporary rendering outputs
+└── requirements.txt          # Python dependencies
+```
+
+---
+
+## 🔧 Dependencies
+
+All dependencies are specified in `requirements.txt`. Key libraries:
+
+- **OpenGL** (PyOpenGL): 3D graphics rendering
+- **GLFW**: Window management and input handling
+- **NumPy**: Numerical computing
+- **OpenCV**: Image processing
+- **PyTorch**: Deep learning framework (for AI tasks)
+- **Ultralytics YOLO**: Object detection model
+- **Trimesh**: 3D mesh processing
+- **Pillow**: Image I/O
+- **Matplotlib**: Data visualization
+
+---
+
+## 📊 Output Dataset Structure
+
+```
+output_dataset/
+├── images/                   # RGB rendered images
+├── depth/                    # Depth maps (.npy files)
+├── masks/                    # Instance segmentation masks
+├── labels/
+│   ├── coco/                # COCO format annotations (.json)
+│   └── yolo/                # YOLO format annotations (.txt)
+├── metadata/                 # Scene metadata
+│   ├── dataset_log.csv       # Rendering log
+│   └── scene_XXXXX.json      # Per-frame metadata
+└── README.txt                # Dataset information
+```
+
+---
+
+## 🎓 Architecture
+
+The system follows a **top-down hierarchical rendering architecture**:
+
+1. **Scene Graph** (`entity.py`): Manages objects and their transformations
+2. **Render Manager** (`renderers.py`): Coordinates multiple render passes
+3. **Drawables**: Objects that implement `setup()` and `draw()` methods
+4. **Shader Pipeline**: Multiple rendering modes (Phong, depth, masks)
+
+**Design Pattern**: All renderable objects must implement:
+- `setup()` - Initialize OpenGL resources
+- `draw(projection, view, model)` - Render the object
+
+---
+
+## 🐛 Troubleshooting
+
+### Import Errors
+If you encounter import errors, ensure your virtual environment is activated:
+```bash
+# Windows
+venv\Scripts\activate
+# macOS/Linux
+source venv/bin/activate
+```
+
+### GLFW Window Not Opening
+- Ensure your graphics drivers are up to date
+- Check that OpenGL 3.3+ is supported on your system
+
+### CUDA/GPU Issues
+If you want GPU acceleration for PyTorch:
+```bash
+# Install CUDA-enabled PyTorch
+pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
+```
+
+### Performance Issues
+- Run in headless mode for faster batch processing
+- Reduce image resolution if needed
+- Check GPU usage with `nvidia-smi` (NVIDIA GPUs only)
+
+---
+
+## 📚 References
+
+- [OpenGL Documentation](https://www.khronos.org/opengl/)
+- [GLFW Documentation](https://www.glfw.org/)
+- [PyTorch Documentation](https://pytorch.org/)
+- [Ultralytics YOLO](https://github.com/ultralytics/ultralytics)
+
+---
+
+## 🔗 Project Links
+
+- **GitHub Pages**: [https://ben-cp.github.io/VisionDrive3D/](https://ben-cp.github.io/VisionDrive3D/)
+- **GitHub Repository**: [https://github.com/ben-cp/VisionDrive3D](https://github.com/ben-cp/VisionDrive3D)
+
+---
+
+## 📝 License
+
+This project is part of a Computer Graphics coursework assignment (HK_252).
+
+---
+
+## 🤝 Support
+
+For issues, questions, or suggestions, please refer to the GitHub Pages documentation or create an issue on the repository.
+
+**Happy Rendering! 🎨🚗🎥**
