@@ -40,9 +40,15 @@
 
 ### Prerequisites
 
-- Python 3.10+ (3.11+ recommended; on 3.10 `imgui-bundle` is pinned to 1.5.2 — see Troubleshooting)
-- pip + venv
-- An OpenGL 3.3+ capable GPU/driver (headless servers: X display or Xvfb required)
+- **Python 3.10** (recommended/tested). ⚠️ Python 3.12+ is **not** supported yet: `imgui-bundle==1.5.2` has no cp312/cp313 wheels, and PyOpenGL 3.1.10 misbehaves on Python 3.13 (`glGetString` returns `None`, offscreen FBO setup fails). With `uv`, create the venv with: `uv venv --python 3.10 venv`
+- pip + venv (or [uv](https://github.com/astral-sh/uv))
+- An OpenGL 3.3+ capable GPU/driver
+- **Headless Linux server:** `xvfb` (virtual display) is required — GLFW/OSMesa still need it for context creation:
+
+  ```bash
+  sudo apt-get update
+  sudo apt-get install -y xvfb libosmesa6 libgl1-mesa-dri libgl1-mesa-glx
+  ```
 
 ### Step 1: Clone the Repository
 
@@ -75,6 +81,8 @@ pip install -r requirements.txt
 ```
 
 **Note:** `torch` and `ultralytics` are **commented out** in `requirements.txt` (only needed for AI demos). Install them manually if required; for GPU support, refer to the [PyTorch installation guide](https://pytorch.org/get-started/locally/).
+
+**Note:** `imgui-bundle` is pinned to `==1.5.2`, which only ships prebuilt wheels for Python 3.10. Don't bump the pin unless you also change the Python version.
 
 ### Step 4: Verify Installation
 
@@ -134,7 +142,7 @@ python -m src.viewer --headless \
     --multiview                   # ALSO export all 7 surround cameras
 ```
 
-On a headless server without a display:
+On a headless server without a display, wrap the command (and the verification step) with `xvfb-run -a`:
 
 ```bash
 xvfb-run -a python -m src.viewer --headless --frames 100 --output ./output_dataset
@@ -229,6 +237,16 @@ All dependencies are specified in `requirements.txt`. Key libraries:
 - **imgui-bundle** (pinned `==1.5.2` for Python 3.10): UI tooling
 - **pandas / matplotlib**: Data handling & visualization
 - *Optional (commented out)*: **torch**, **ultralytics** for AI demos
+
+---
+
+## 🩺 Troubleshooting
+
+- **`ModuleNotFoundError: No module named 'cv2'` / `'OpenGL'` / `'imgui_bundle'`** — `requirements.txt` never finished installing (see below), so nothing was installed. Re-run `pip install -r requirements.txt` with the right Python (3.10).
+- **`imgui-bundle` fails to build from source** (CMake error: `RandR headers not found`) — you are on Python > 3.10, which has no prebuilt wheel for the pinned version. Fix: recreate the venv with Python 3.10 (`uv venv --python 3.10 venv`), or run the system build deps install: `sudo apt-get install -y libxrandr-dev libxinerama-dev libxcursor-dev libxi-dev libxxf86vm-dev libgl1-mesa-dev`. The venv fix is recommended.
+- **Offscreen FBO fails / `glGetString` returns `None` / `FBO incomplete`** — PyOpenGL is incompatible with the venv's Python (seen on 3.13). Recreate the venv with Python 3.10.
+- **`GLFW failed to initialize` / `X11: The DISPLAY environment variable is missing`** — you ran the viewer on a machine without a display. Install Xvfb and prefix the command: `sudo apt-get install -y xvfb && xvfb-run -a python -m src.viewer ...`
+- **`EGL: Failed to find a suitable EGLConfig` / only software GL available** — install DRI drivers: `sudo apt-get install -y libgl1-mesa-dri libgl1-mesa-glx libosmesa6`.
 
 ---
 

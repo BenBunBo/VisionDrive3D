@@ -477,8 +477,15 @@ class ViewerApp:
         for i in range(num_frames):
             # Traffic flow only -- NO per-frame re-randomization.
             self._ensure_camera_host()
-            self.traffic_manager.update(self.frame_dt)
-            self.scene.update(self.frame_dt)
+            # Substep the simulation so large --dt values take effect while
+            # keeping per-step dt <= 0.1s (the safety clamp inside
+            # TrafficManager.update / Car.update still applies).
+            sim_dt = max(0.0, float(self.frame_dt))
+            steps = max(1, int(np.ceil(sim_dt / 0.1)))
+            sub_dt = sim_dt / steps
+            for _ in range(steps):
+                self.traffic_manager.update(sub_dt)
+                self.scene.update(sub_dt)
 
             active_cam = self.camera_manager.get_active_camera()
             # To get ground alignment properly if needed

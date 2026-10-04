@@ -4,7 +4,7 @@ outputs/
 assets/architecture.drawio
 .cursor/
 .codex
-output_dataset/
+output_dataset
 weights/
 .ultralytics/
 runs/
