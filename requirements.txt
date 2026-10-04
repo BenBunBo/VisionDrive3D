@@ -3,7 +3,7 @@ PyOpenGL_accelerate
 opencv-python
 glfw
 numpy
-imgui-bundle
+imgui-bundle==1.5.2  # last version with prebuilt Python 3.10 wheels (newer ones build from source)
 pandas
 pywavefront
 trimesh

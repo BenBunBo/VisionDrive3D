@@ -24,6 +24,7 @@ class DatasetDirectoryBuilder:
             "masks",
             "labels/coco",
             "labels/yolo",
+            "labels/kitti",
             "metadata"
         ]
         
@@ -60,6 +61,7 @@ Folder Structure:
 - masks/        : Segmentation masks (.png)
 - labels/coco/  : COCO JSON annotations
 - labels/yolo/  : YOLO .txt label files
+- labels/kitti/ : KITTI 3D bbox label files (.txt)
 - metadata/     : Per-scene JSON + global dataset_log.csv
 """
         readme_path.write_text(content, encoding='utf-8')
@@ -81,6 +83,7 @@ Folder Structure:
             "mask": self.root / "masks" / f"{base}.png",
             "coco_json": self.root / "labels" / "coco" / f"{base}.json",
             "yolo_txt": self.root / "labels" / "yolo" / f"{base}.txt",
+            "kitti_txt": self.root / "labels" / "kitti" / f"{base}.txt",
             "meta_json": self.root / "metadata" / f"{base}.json",
         }
         return paths

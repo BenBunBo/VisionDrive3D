@@ -7,6 +7,7 @@ from pathlib import Path
 from src.dataset.directory_builder import DatasetDirectoryBuilder
 from src.dataset.metadata_writer import MetadataWriter
 from src.dataset.export_validator import ExportValidator
+from src.annotation.annotations import write_kitti_labels
 import json as _json
 
 _CLASS_MAP = {
@@ -168,6 +169,10 @@ class DatasetManager:
             paths["image"], objects, img_w, img_h
         )
         _write_yolo_labels(paths["yolo_txt"], objects, img_w, img_h)
+        write_kitti_labels(
+            paths["kitti_txt"], objects,
+            camera_params.get("extrinsic_matrix"), img_w, img_h,
+        )
 
         if scene_id not in self.session_scenes:
             self.session_scenes.append(scene_id)

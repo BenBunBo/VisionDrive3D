@@ -9,3 +9,5 @@ weights/
 .ultralytics/
 runs/
 *.pt
+venv/
+.mesh_cache/
