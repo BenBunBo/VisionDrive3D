@@ -1,0 +1,253 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>VisionDrive3D: Synthetic Driving Data for Detection & Segmentation</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="page">
+      <section class="hero" id="top">
+        <p class="hero-kicker">Computer Graphics Course Project</p>
+        <h1>VisionDrive3D: Synthetic Driving Data for Detection &amp; Segmentation</h1>
+        <p class="authors"> • Computer Graphics Course Project • </p>
+        <div class="hero-actions">
+          <a class="btn" href="#results">View Results</a>
+          <a class="btn btn-outline" href="#" aria-label="GitHub link placeholder">GitHub</a>
+        </div>
+        <figure class="teaser panel">
+          <img
+            src="assets/images/dataset_grid.png"
+            alt="VisionDrive3D dataset preview grid"
+            loading="lazy"
+          />
+          <figcaption>Teaser: synthetic driving scenes with dense vehicle layout variation.</figcaption>
+        </figure>
+      </section>
+
+      <hr />
+
+      <section id="abstract" class="content-section">
+        <div class="section-label"><span></span><p>Abstract</p><span></span></div>
+        <h2>Abstract</h2>
+        <p class="lead">
+          We present VisionDrive3D, a synthetic driving scene renderer that generates RGB images with
+          ground-truth bounding boxes, segmentation masks, and depth maps. We fine-tune YOLOv8 detection
+          and segmentation models on this synthetic data and evaluate transfer quality. Results show
+          improved in-domain performance after fine-tuning compared with zero-shot baselines.
+        </p>
+      </section>
+
+      <hr />
+
+      <section id="dataset" class="content-section">
+        <div class="section-label"><span></span><p>Dataset</p><span></span></div>
+        <h2>Dataset</h2>
+        <div class="dataset-grid">
+          <figure class="panel">
+            <img
+              src="assets/images/dataset_grid.png"
+              alt="Dataset overview grid"
+              loading="lazy"
+            />
+          </figure>
+          <div class="table-wrap panel">
+            <table class="table" id="dataset-stats-table">
+              <thead>
+                <tr>
+                  <th>Resolution</th>
+                  <th>Classes</th>
+                  <th>Train</th>
+                  <th>Val</th>
+                  <th>Test</th>
+                  <th>Format</th>
+                </tr>
+              </thead>
+              <tbody id="dataset-stats-body"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <hr />
+
+      <section id="method" class="content-section">
+        <div class="section-label"><span></span><p>Method</p><span></span></div>
+        <h2>Method</h2>
+        <div class="pipeline-wrap panel" aria-label="Pipeline diagram">
+          <div class="pipeline">
+            <div class="node">OpenGL Renderer</div>
+            <div class="arrow">→</div>
+            <div class="node">GT Labels</div>
+            <div class="arrow">→</div>
+            <div class="node">YOLOv8 Fine-tune</div>
+            <div class="arrow">→</div>
+            <div class="node">Evaluate</div>
+          </div>
+          <div class="pipeline-sub">
+            <div class="node small">Depth Maps</div>
+            <div class="arrow">↗</div>
+          </div>
+        </div>
+        <div class="method-text">
+          <p>
+            <strong>Stage 1.</strong> VisionDrive3D renders multi-car urban traffic scenes and exports aligned
+            image, depth, and annotation outputs.
+          </p>
+          <p>
+            <strong>Stage 2.</strong> We train YOLOv8 detection and segmentation models with deterministic
+            train/val/test splits from synthetic images.
+          </p>
+          <p>
+            <strong>Stage 3.</strong> We compare zero-shot and fine-tuned checkpoints, then profile backbone
+            quality-speed trade-offs on the held-out test split.
+          </p>
+        </div>
+      </section>
+
+      <hr />
+
+      <section id="results" class="content-section">
+        <div class="section-label"><span></span><p>Results</p><span></span></div>
+        <h2>Results</h2>
+
+        <h3>Detection and Segmentation Comparison</h3>
+        <div class="table-wrap panel">
+          <table class="table" id="results-table">
+            <thead>
+              <tr>
+                <th>Model</th>
+                <th>Type</th>
+                <th>mAP@50</th>
+                <th>mAP@50-95</th>
+                <th>Speed (ms)</th>
+              </tr>
+            </thead>
+            <tbody id="results-body"></tbody>
+          </table>
+        </div>
+
+        <h3>Backbone Comparison</h3>
+        <div class="table-wrap panel">
+          <table class="table" id="backbone-table">
+            <thead>
+              <tr>
+                <th>Model</th>
+                <th>mAP@50</th>
+                <th>mAP@50-95</th>
+                <th>Precision</th>
+                <th>Recall</th>
+                <th>Speed (ms)</th>
+                <th>Params (M)</th>
+              </tr>
+            </thead>
+            <tbody id="backbone-body"></tbody>
+          </table>
+        </div>
+
+        <h3>Cross-Dataset Pretrained 2D Detector Benchmark</h3>
+        <p class="notice">
+          COCO-pretrained weights evaluated zero-shot on the VisionDrive3D test split
+          (100 images, car class only). FLOPs via thop (MACs×2).
+        </p>
+        <div class="table-wrap panel">
+          <table class="table" id="zeroshot-table">
+            <thead>
+              <tr>
+                <th>Model</th>
+                <th>mAP@50</th>
+                <th>mAP@50-95</th>
+                <th>FPS</th>
+                <th>Params (M)</th>
+                <th>FLOPs (G)</th>
+              </tr>
+            </thead>
+            <tbody id="zeroshot-body"></tbody>
+          </table>
+        </div>
+
+        <h3>Backbone Plot</h3>
+        <figure class="panel">
+          <img
+            src="assets/plots/backbone_comparison.png"
+            alt="Backbone comparison chart"
+            loading="lazy"
+          />
+        </figure>
+
+        <h3>Latest Inference Visuals (Contour Labels)</h3>
+        <p class="notice">
+          Updated qualitative outputs from YOLOv8n-seg retraining with contour-extracted polygons.
+        </p>
+        <div class="latest-grid">
+          <figure class="panel">
+            <img
+              src="assets/images/latest/comparison_grid.png"
+              alt="Input, detection and segmentation side-by-side comparison"
+              loading="lazy"
+            />
+            <figcaption>Top scenes: RGB input vs detection vs segmentation predictions.</figcaption>
+          </figure>
+          <figure class="panel">
+            <img
+              src="assets/images/latest/segmentation_inference_demo.png"
+              alt="Segmentation inference grid"
+              loading="lazy"
+            />
+            <figcaption>Segmentation predictions on held-out test images.</figcaption>
+          </figure>
+          <figure class="panel">
+            <img
+              src="assets/images/latest/detection_inference_demo.png"
+              alt="Detection inference grid"
+              loading="lazy"
+            />
+            <figcaption>Detection predictions on held-out test images.</figcaption>
+          </figure>
+          <figure class="panel">
+            <img
+              src="assets/images/latest/yoloseg_training_curves.png"
+              alt="YOLO segmentation training curves"
+              loading="lazy"
+            />
+            <figcaption>YOLO-seg training curves from the latest contour-label run.</figcaption>
+          </figure>
+        </div>
+      </section>
+
+      <hr />
+
+      <section id="qualitative" class="content-section">
+        <div class="section-label"><span></span><p>Qualitative</p><span></span></div>
+        <h2>Qualitative</h2>
+        <div class="qualitative-grid" id="qualitative-grid"></div>
+      </section>
+
+      <hr />
+
+      <section id="conclusion" class="content-section">
+        <div class="section-label"><span></span><p>Conclusion</p><span></span></div>
+        <h2>Conclusion</h2>
+        <p>
+          VisionDrive3D provides an end-to-end synthetic data workflow for object detection and segmentation.
+          Fine-tuning on renderer-generated supervision improves target-task metrics, while model-family
+          comparisons expose practical accuracy-speed trade-offs for deployment.
+        </p>
+      </section>
+
+      <hr />
+
+      <section id="downloads" class="content-section">
+        <div class="section-label"><span></span><p>Downloads</p><span></span></div>
+        <h2>Downloads</h2>
+        <ul class="links">
+          <li><a href="#">Dataset Sample (10 scenes)</a></li>
+          <li><a href="#">Training Code</a></li>
+        </ul>
+      </section>
+    </main>
+
+    <script src="script.js"></script>
+  </body>
+</html>

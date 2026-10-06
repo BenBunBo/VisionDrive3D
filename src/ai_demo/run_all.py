@@ -130,7 +130,7 @@ def ensure_dataset_grid(dataset_root: Path, root: Path) -> Path | None:
 
 
 def sync_project_page_assets(dataset_root: Path, root: Path) -> None:
-    page_root = root / "project_page"
+    page_root = root / "docs"
     assets_data = page_root / "assets" / "data"
     assets_images = page_root / "assets" / "images"
     assets_qual = assets_images / "qualitative"
@@ -206,7 +206,7 @@ def main() -> None:
         print("[INFO] Skipping backbone experiment step (--skip-backbone)")
 
     sync_project_page_assets(dataset_root, root)
-    print("Done. Open project_page/index.html to view results.")
+    print("Done. Open docs/index.html to view results.")
 
 
 if __name__ == "__main__":
