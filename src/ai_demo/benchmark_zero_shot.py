@@ -21,7 +21,11 @@ import numpy as np
 from src.ai_demo.model_zoo import ensure_ckpt_local, load_yaml, project_root, resolve_ultralytics_weight
 
 MODEL_CONFIGS = {
+    "yolo26n": "src/ai_demo/config/model/yolo26n.yaml",
+    "yolo26s": "src/ai_demo/config/model/yolo26s.yaml",
     "yolo26m": "src/ai_demo/config/model/yolo26m.yaml",
+    "yolo26l": "src/ai_demo/config/model/yolo26l.yaml",
+    "yolo26x": "src/ai_demo/config/model/yolo26x.yaml",
     "rtdetrv2-s": "src/ai_demo/config/model/rtdetrv2-s.yaml",
     "fasterrcnn": "src/ai_demo/config/model/fasterrcnn.yaml",
 }

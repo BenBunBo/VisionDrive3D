@@ -1,14 +1,54 @@
 {
   "models": {
+    "yolo26n": {
+      "mAP50": 0.6889864037983862,
+      "mAP50_95": 0.29624896893563035,
+      "FPS": 35.32,
+      "inference_ms": 28.31,
+      "params": 2572280,
+      "FLOPs": 6119244800.0,
+      "n_pred": 168,
+      "ckpt": "output_dataset/ckpt/yolo26n.pt"
+    },
+    "yolo26s": {
+      "mAP50": 0.7331272020185094,
+      "mAP50_95": 0.3061441231282538,
+      "FPS": 32.27,
+      "inference_ms": 30.99,
+      "params": 10009784,
+      "FLOPs": 22838476800.0,
+      "n_pred": 212,
+      "ckpt": "output_dataset/ckpt/yolo26s.pt"
+    },
     "yolo26m": {
       "mAP50": 0.7288641521716084,
       "mAP50_95": 0.3142461651334982,
-      "FPS": 35.35,
-      "inference_ms": 28.29,
+      "FPS": 33.21,
+      "inference_ms": 30.12,
       "params": 21896248,
       "FLOPs": 75397529600.0,
       "n_pred": 213,
       "ckpt": "output_dataset/ckpt/yolo26m.pt"
+    },
+    "yolo26l": {
+      "mAP50": 0.7361375955158829,
+      "mAP50_95": 0.31995407419132516,
+      "FPS": 30.64,
+      "inference_ms": 32.64,
+      "params": 26299704,
+      "FLOPs": 93797785600.0,
+      "n_pred": 214,
+      "ckpt": "output_dataset/ckpt/yolo26l.pt"
+    },
+    "yolo26x": {
+      "mAP50": 0.7277263192077963,
+      "mAP50_95": 0.3131267277185044,
+      "FPS": 30.42,
+      "inference_ms": 32.88,
+      "params": 58993368,
+      "FLOPs": 209534054400.0,
+      "n_pred": 216,
+      "ckpt": "output_dataset/ckpt/yolo26x.pt"
     },
     "rtdetrv2-s": {
       "mAP50": 0.7555172093482558,
@@ -34,7 +74,6 @@
   "meta": {
     "split": "test",
     "n_images": 100,
-    "n_gt_boxes": 232,
-    "flops_note": "thop MACs*2; yolo26m@640, rtdetrv2@640+pixel_mask, fasterrcnn@800 (torchvision resizes to short-side 800 at infer)"
+    "n_gt_boxes": 232
   }
 }

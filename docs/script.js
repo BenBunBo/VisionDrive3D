@@ -240,7 +240,11 @@ function renderZeroShotTable(data) {
   body.innerHTML = "";
 
   const displayNames = {
+    yolo26n: "YOLO26n",
+    yolo26s: "YOLO26s",
     yolo26m: "YOLO26m",
+    yolo26l: "YOLO26l",
+    yolo26x: "YOLO26x",
     "rtdetrv2-s": "RT-DETRv2-S (R18)",
     fasterrcnn: "Faster R-CNN (R50-FPN)",
   };

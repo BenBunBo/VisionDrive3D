@@ -1,0 +1,12 @@
+# Zero-shot benchmark model: YOLO26n (Ultralytics, COCO-pretrained).
+# Run: /home/ml4u/anaconda3/envs/vd3d-ai/bin/python src/ai_demo/benchmark_zero_shot.py --models yolo26n
+framework: ultralytics
+model_name: yolo26n
+ckpt_local: output_dataset/ckpt/yolo26n.pt
+ckpt_url: https://github.com/ultralytics/assets/releases/download/v8.4.0/yolo26n.pt
+ultralytics_asset: yolo26n.pt
+imgsz: 640
+conf: 0.25
+iou: 0.7
+device: "0"
+coco_car_id: 2
