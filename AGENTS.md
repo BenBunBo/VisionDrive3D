@@ -1,4 +1,0 @@
-- Use venv when you wanna render or run `src/viewer.py`
-- When create new file python script for tools (eval, visualize, analyze, ... not core implementations of model) note some commands i should use to run in comment on top of those files.
-- Use conda env when you wanna run anything relate to AI model (detection, segmentation,..)
-- AI env: `vd3d-ai` (torch cu121, see `environment-ai.yml`). Never install torch/ultralytics into `venv/`. Run AI via `/home/ml4u/anaconda3/envs/vd3d-ai/bin/python src/ai_demo/...` (absolute path; `conda run` misresolves `python` when `venv` is active in PATH).
