@@ -56,6 +56,22 @@ def collect_scene_images(images_root: Path) -> List[Path]:
     return image_paths
 
 
+def load_split_from_imagesets(dataset_root: Path, images_root: Path) -> SplitData | None:
+    """Load train/val/test split from output_dataset/ImageSets/*.txt if present."""
+    split_sets: Dict[str, List[Path]] = {}
+    for split_name in ("train", "val", "test"):
+        split_file = dataset_root / "ImageSets" / f"{split_name}.txt"
+        if not split_file.exists():
+            return None
+        ids = [ln.strip() for ln in split_file.read_text(encoding="utf-8").splitlines() if ln.strip()]
+        paths = [images_root / f"scene_{sid}.png" for sid in ids]
+        missing = [p for p in paths if not p.exists()]
+        if missing:
+            raise FileNotFoundError(f"ImageSets/{split_name}.txt lists missing images, e.g. {missing[0]}")
+        split_sets[split_name] = paths
+    return SplitData(train=split_sets["train"], val=split_sets["val"], test=split_sets["test"])
+
+
 def split_images(image_paths: List[Path], seed: int = SEED) -> SplitData:
     indices = list(range(len(image_paths)))
     rng = random.Random(seed)
@@ -469,6 +485,8 @@ def run_training(
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Train YOLO models on VisionDrive3D dataset")
     parser.add_argument("--dataset", type=str, default="./output_dataset")
+    parser.add_argument("--dataset-config", type=str, default="",
+                        help="Optional dataset yaml (src/ai_demo/config/dataset/dataset.yaml); overrides --dataset root")
     parser.add_argument("--epochs", type=int, default=50)
     parser.add_argument("--imgsz", type=int, default=640)
     parser.add_argument("--batch", type=int, default=16)
@@ -479,6 +497,13 @@ def parse_args() -> argparse.Namespace:
 def main() -> None:
     args = parse_args()
     root = project_root()
+    if args.dataset_config:
+        import sys
+        sys.path.insert(0, str(root))
+        from src.ai_demo.model_zoo import load_yaml
+        ds_cfg = load_yaml(args.dataset_config)
+        args.dataset = str(ds_cfg.get("dataset_root", args.dataset))
+        print(f"Using dataset config: {args.dataset_config}")
     dataset_root = resolve_dataset_root(args.dataset, root)
 
     images_root = dataset_root / "images"
@@ -489,7 +514,13 @@ def main() -> None:
     if not image_paths:
         raise RuntimeError(f"No scene_XXXXX.png files found under: {images_root}")
 
-    split_data = split_images(image_paths, seed=SEED)
+    split_data = load_split_from_imagesets(dataset_root, images_root)
+    if split_data is None:
+        split_data = split_images(image_paths, seed=SEED)
+        print("ImageSets/*.txt not found; used random 80/10/10 split (seed 42).")
+    else:
+        print(f"Loaded split from ImageSets: {len(split_data.train)} train | "
+              f"{len(split_data.val)} val | {len(split_data.test)} test")
     prepare_split_symlinks(dataset_root, split_data)
 
     print(

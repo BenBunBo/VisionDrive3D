@@ -1,0 +1,14 @@
+# Zero-shot benchmark model: YOLO26m (Ultralytics, COCO-pretrained).
+# Run: conda run -n vd3d-ai python src/ai_demo/benchmark_zero_shot.py --models yolo26m
+framework: ultralytics
+model_name: yolo26m
+# Local ckpt first; if missing, download from ckpt_url (or `ultralytics_asset` auto-fetch).
+ckpt_local: output_dataset/ckpt/yolo26m.pt
+ckpt_url: https://github.com/ultralytics/assets/releases/download/v8.4.0/yolo26m.pt
+ultralytics_asset: yolo26m.pt
+imgsz: 640
+conf: 0.25
+iou: 0.7
+device: "0"
+# COCO 'car' id used for zero-shot filtering (ultralytics keeps all, remapped at eval).
+coco_car_id: 2

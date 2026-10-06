@@ -1,0 +1,13 @@
+# Zero-shot benchmark model: Faster R-CNN (torchvision, COCO-pretrained).
+# Run: conda run -n vd3d-ai python src/ai_demo/benchmark_zero_shot.py --models fasterrcnn
+framework: torchvision
+model_name: fasterrcnn_resnet50_fpn_v2
+# torchvision COCO weights; downloaded once into ckpt_local if missing.
+ckpt_local: output_dataset/ckpt/fasterrcnn_resnet50_fpn_v2_coco.pth
+ckpt_url: https://download.pytorch.org/models/fasterrcnn_resnet50_fpn_v2_coco-dd69338a.pth
+torchvision_weights: FasterRCNN_ResNet50_FPN_V2_Weights.COCO_V1
+imgsz: 800
+conf: 0.25
+device: "0"
+# torchvision COCO label id for 'car' (1-indexed, background=0).
+coco_car_id: 3

@@ -146,6 +146,27 @@
           </table>
         </div>
 
+        <h3>Cross-Dataset Pretrained 2D Detector Benchmark</h3>
+        <p class="notice">
+          COCO-pretrained weights evaluated zero-shot on the VisionDrive3D test split
+          (100 images, car class only). FLOPs via thop (MACs×2).
+        </p>
+        <div class="table-wrap panel">
+          <table class="table" id="zeroshot-table">
+            <thead>
+              <tr>
+                <th>Model</th>
+                <th>mAP@50</th>
+                <th>mAP@50-95</th>
+                <th>FPS</th>
+                <th>Params (M)</th>
+                <th>FLOPs (G)</th>
+              </tr>
+            </thead>
+            <tbody id="zeroshot-body"></tbody>
+          </table>
+        </div>
+
         <h3>Backbone Plot</h3>
         <figure class="panel">
           <img

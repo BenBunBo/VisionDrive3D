@@ -1,0 +1,32 @@
+# VisionDrive3D AI env (keeps repo venv lean — venv is viewer-only).
+# Create: conda env create -f environment-ai.yml
+# Update: conda env update -f environment-ai.yml --prune
+# Use:   conda activate vd3d-ai
+#        conda run -n vd3d-ai python src/ai_demo/train.py --help
+name: vd3d-ai
+channels:
+  - pytorch
+  - nvidia
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.10
+  - pip
+  - pip:
+    # Pinned to cu121 per project decision (A40 / driver 535 safe).
+    - torch --index-url https://download.pytorch.org/whl/cu121
+    - torchvision --index-url https://download.pytorch.org/whl/cu121
+    - ultralytics>=8.3
+    - opencv-python
+    - numpy
+    - pandas
+    - matplotlib
+    - pillow
+    - pycocotools
+    - thop
+    - pyyaml
+    - tqdm
+    - transformers
+    - huggingface_hub
+variables:
+  YOLO_CONFIG_DIR: .ultralytics

@@ -235,5 +235,72 @@ async function loadBackboneCsv() {
   }
 }
 
+function renderZeroShotTable(data) {
+  const body = document.getElementById("zeroshot-body");
+  body.innerHTML = "";
+
+  const displayNames = {
+    yolo26m: "YOLO26m",
+    "rtdetrv2-s": "RT-DETRv2-S (R18)",
+    fasterrcnn: "Faster R-CNN (R50-FPN)",
+  };
+  const models = (data && data.models) || {};
+  const rows = Object.keys(displayNames)
+    .filter((key) => models[key])
+    .map((key) => ({
+      model: displayNames[key],
+      map50: Number(models[key].mAP50 || 0),
+      map95: Number(models[key].mAP50_95 || 0),
+      fps: Number(models[key].FPS || 0),
+      paramsM: Number(models[key].params || 0) / 1e6,
+      flopsG: Number(models[key].FLOPs || 0) / 1e9,
+    }));
+
+  if (!rows.length) {
+    body.innerHTML = '<tr><td colspan="6" class="notice">benchmark_zeroshot.json not found.</td></tr>';
+    return;
+  }
+
+  const allMap50 = rows.map((r) => r.map50);
+  const allMap95 = rows.map((r) => r.map95);
+  const allFps = rows.map((r) => r.fps);
+  const allParams = rows.map((r) => r.paramsM);
+  const allFlops = rows.map((r) => r.flopsG);
+
+  const getClass = (rank) => {
+    if (rank === 1) return "best";
+    if (rank === 2) return "second-best";
+    if (rank === 3) return "third-best";
+    return "";
+  };
+
+  rows.forEach((row) => {
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td>${row.model}</td>
+      <td class="${getClass(getRank(row.map50, allMap50, false))}">${fmt(row.map50, 3)}</td>
+      <td class="${getClass(getRank(row.map95, allMap95, false))}">${fmt(row.map95, 3)}</td>
+      <td class="${getClass(getRank(row.fps, allFps, false))}">${fmt(row.fps, 1)}</td>
+      <td class="${getClass(getRank(row.paramsM, allParams, true))}">${fmt(row.paramsM, 1)}</td>
+      <td class="${getClass(getRank(row.flopsG, allFlops, true))}">${fmt(row.flopsG, 1)}</td>
+    `;
+    body.appendChild(tr);
+  });
+}
+
+async function loadZeroShot() {
+  try {
+    const response = await fetch("assets/data/benchmark_zeroshot.json");
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    const data = await response.json();
+    renderZeroShotTable(data);
+  } catch (err) {
+    console.error(err);
+    document.getElementById("zeroshot-body").innerHTML =
+      '<tr><td colspan="6" class="notice">benchmark_zeroshot.json not found.</td></tr>';
+  }
+}
+
 loadResults();
 loadBackboneCsv();
+loadZeroShot();

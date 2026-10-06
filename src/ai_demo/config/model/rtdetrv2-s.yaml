@@ -1,0 +1,16 @@
+# Zero-shot benchmark model: RT-DETRv2 (HuggingFace transformers, COCO-pretrained).
+# NOTE: ultralytics>=8.3 does not ship RT-DETRv2 weights, so this model runs via
+# transformers. The "S" (small) variant maps to the official R18vd checkpoint.
+# Run: conda run -n vd3d-ai python src/ai_demo/benchmark_zero_shot.py --models rtdetrv2-s
+framework: transformers
+model_name: rtdetr_v2_r18vd
+hf_repo: PekingU/rtdetr_v2_r18vd
+# Local HF snapshot dir first; if missing, snapshot_download(hf_repo) into it.
+ckpt_local: output_dataset/ckpt/rtdetr_v2_r18vd
+ckpt_url: https://huggingface.co/PekingU/rtdetr_v2_r18vd
+imgsz: 640
+conf: 0.25
+device: "0"
+# Label id for 'car' resolved dynamically from the checkpoint's id2label
+# (this checkpoint uses 0-indexed 80-class ids: car = 2). Value below is fallback.
+coco_car_id: 2

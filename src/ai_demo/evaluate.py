@@ -242,6 +242,8 @@ def print_summary_table(summary_rows: Sequence[tuple[str, Dict[str, float]]]) ->
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Evaluate YOLO models on VisionDrive3D test split")
     parser.add_argument("--dataset", type=str, default="./output_dataset")
+    parser.add_argument("--dataset-config", type=str, default="",
+                        help="Optional dataset yaml (src/ai_demo/config/dataset/dataset.yaml); overrides --dataset root")
     parser.add_argument("--device", type=str, default="0")
     return parser.parse_args()
 
@@ -249,6 +251,13 @@ def parse_args() -> argparse.Namespace:
 def main() -> None:
     args = parse_args()
     root = project_root()
+    if args.dataset_config:
+        import sys
+        sys.path.insert(0, str(root))
+        from src.ai_demo.model_zoo import load_yaml
+        ds_cfg = load_yaml(args.dataset_config)
+        args.dataset = str(ds_cfg.get("dataset_root", args.dataset))
+        print(f"Using dataset config: {args.dataset_config}")
     dataset_root = resolve_dataset_root(args.dataset, root)
     runtime_device = resolve_runtime_device(args.device)
 
