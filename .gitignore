@@ -11,3 +11,4 @@ runs/
 *.pt
 venv/
 .mesh_cache/
+AGENTS.md
