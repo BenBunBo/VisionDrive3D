@@ -37,9 +37,9 @@
       "car"
     ],
     "splits": {
-      "train": 400,
-      "val": 50,
-      "test": 50
+      "train": 800,
+      "val": 100,
+      "test": 100
     },
     "qualitative_scenes": [
       "scene_00003",

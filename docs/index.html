@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>VisionDrive3D: Synthetic Driving Data for Detection & Segmentation</title>
-    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="styles.css?v=4" />
   </head>
   <body>
     <main class="page">
@@ -14,15 +14,62 @@
         <p class="authors"> • Computer Graphics Course Project • </p>
         <div class="hero-actions">
           <a class="btn" href="#results">View Results</a>
-          <a class="btn btn-outline" href="#" aria-label="GitHub link placeholder">GitHub</a>
+          <a class="btn btn-outline" href="https://github.com/BenBunBo/VisionDrive3D" target="_blank" rel="noopener noreferrer" aria-label="VisionDrive3D GitHub repository">GitHub</a>
         </div>
         <figure class="teaser panel">
-          <img
-            src="assets/images/dataset_grid.png"
-            alt="VisionDrive3D dataset preview grid"
-            loading="lazy"
-          />
-          <figcaption>Teaser: synthetic driving scenes with dense vehicle layout variation.</figcaption>
+          <div class="teaser-grid">
+            <figure class="teaser-card">
+              <button class="teaser-zoom" data-full="assets/images/teaser_scene_00049/rgb.png" data-caption="RGB input — scene_00049" aria-label="Enlarge RGB input">
+                <img
+                  src="assets/images/teaser_scene_00049/rgb.png"
+                  alt="RGB input scene_00049"
+                  loading="lazy"
+                />
+              </button>
+              <figcaption>RGB input</figcaption>
+            </figure>
+            <figure class="teaser-card">
+              <button class="teaser-zoom" data-full="assets/images/teaser_scene_00049/depth_inferno.png" data-caption="Depth map — scene_00049 (Inferno)" aria-label="Enlarge depth map">
+                <img
+                  src="assets/images/teaser_scene_00049/depth_inferno.png"
+                  alt="Depth map of scene_00049 in Inferno colormap"
+                  loading="lazy"
+                />
+              </button>
+              <figcaption>Depth map</figcaption>
+            </figure>
+            <figure class="teaser-card">
+              <button class="teaser-zoom" data-full="assets/images/teaser_scene_00049/instance_seg.png" data-caption="Instance segmentation — scene_00049" aria-label="Enlarge instance segmentation">
+                <img
+                  src="assets/images/teaser_scene_00049/instance_seg.png"
+                  alt="Instance segmentation mask of scene_00049"
+                  loading="lazy"
+                />
+              </button>
+              <figcaption>Instance seg.</figcaption>
+            </figure>
+            <figure class="teaser-card">
+              <button class="teaser-zoom" data-full="assets/images/teaser_scene_00049/bbox2d.png" data-caption="2D bounding boxes — scene_00049" aria-label="Enlarge 2D bounding boxes">
+                <img
+                  src="assets/images/teaser_scene_00049/bbox2d.png"
+                  alt="2D bounding boxes on scene_00049"
+                  loading="lazy"
+                />
+              </button>
+              <figcaption>2D bbox</figcaption>
+            </figure>
+            <figure class="teaser-card">
+              <button class="teaser-zoom" data-full="assets/images/teaser_scene_00049/bbox3d.png" data-caption="3D bounding boxes — scene_00049" aria-label="Enlarge 3D bounding boxes">
+                <img
+                  src="assets/images/teaser_scene_00049/bbox3d.png"
+                  alt="3D bounding box wireframes projected on scene_00049"
+                  loading="lazy"
+                />
+              </button>
+              <figcaption>3D bbox</figcaption>
+            </figure>
+          </div>
+          <figcaption class="teaser-caption">Teaser (scene_00049): synchronized multimodal captures — RGB input, depth map (Inferno colormap, MiDaS / DepthAnything style: near = bright yellow, far = dark purple), instance segmentation mask, 2D bounding boxes, and projected 3D bbox wireframes. Click any image to enlarge.</figcaption>
         </figure>
       </section>
 
@@ -33,7 +80,7 @@
         <h2>Abstract</h2>
         <p class="lead">
           We present VisionDrive3D, a synthetic driving scene renderer that generates RGB images with
-          ground-truth bounding boxes, segmentation masks, and depth maps. We fine-tune YOLOv8 detection
+          ground-truth bounding boxes, segmentation masks, and depth maps. We fine-tune YOLO detection
           and segmentation models on this synthetic data and evaluate transfer quality. Results show
           improved in-domain performance after fine-tuning compared with zero-shot baselines.
         </p>
@@ -44,16 +91,9 @@
       <section id="dataset" class="content-section">
         <div class="section-label"><span></span><p>Dataset</p><span></span></div>
         <h2>Dataset</h2>
-        <div class="dataset-grid">
-          <figure class="panel">
-            <img
-              src="assets/images/dataset_grid.png"
-              alt="Dataset overview grid"
-              loading="lazy"
-            />
-          </figure>
+        <div class="dataset-layout">
           <div class="table-wrap panel">
-            <table class="table" id="dataset-stats-table">
+            <table class="table dataset-table" id="dataset-stats-table">
               <thead>
                 <tr>
                   <th>Resolution</th>
@@ -64,9 +104,35 @@
                   <th>Format</th>
                 </tr>
               </thead>
-              <tbody id="dataset-stats-body"></tbody>
+              <tbody id="dataset-stats-body">
+                <tr>
+                  <td>1280×720</td>
+                  <td>car</td>
+                  <td>800</td>
+                  <td>100</td>
+                  <td>100</td>
+                  <td>COCO+<wbr />YOLO+<wbr />KITTI</td>
+                </tr>
+              </tbody>
             </table>
           </div>
+          <figure class="panel">
+            <div class="dataset-samples">
+              <button class="teaser-zoom" data-full="assets/images/dataset/scene_00004.png" data-caption="Dataset sample — scene_00004" aria-label="Enlarge scene_00004">
+                <img src="assets/images/dataset/scene_00004.png" alt="Dataset sample scene_00004" loading="lazy" />
+              </button>
+              <button class="teaser-zoom" data-full="assets/images/dataset/scene_00014.png" data-caption="Dataset sample — scene_00014" aria-label="Enlarge scene_00014">
+                <img src="assets/images/dataset/scene_00014.png" alt="Dataset sample scene_00014" loading="lazy" />
+              </button>
+              <button class="teaser-zoom" data-full="assets/images/dataset/scene_00023.png" data-caption="Dataset sample — scene_00023" aria-label="Enlarge scene_00023">
+                <img src="assets/images/dataset/scene_00023.png" alt="Dataset sample scene_00023" loading="lazy" />
+              </button>
+              <button class="teaser-zoom" data-full="assets/images/dataset/scene_00049.png" data-caption="Dataset sample — scene_00049" aria-label="Enlarge scene_00049">
+                <img src="assets/images/dataset/scene_00049.png" alt="Dataset sample scene_00049" loading="lazy" />
+              </button>
+            </div>
+            <figcaption>Sample rendered scenes from the VisionDrive3D dataset (scene_00004, scene_00014, scene_00023, scene_00049).</figcaption>
+          </figure>
         </div>
       <!-- </section>
 
@@ -81,7 +147,7 @@
             <div class="arrow">→</div>
             <div class="node">GT Labels</div>
             <div class="arrow">→</div>
-            <div class="node">YOLOv8 Fine-tune</div>
+            <div class="node">Model</div>
             <div class="arrow">→</div>
             <div class="node">Evaluate</div>
           </div>
@@ -96,7 +162,7 @@
             image, depth, and annotation outputs.
           </p>
           <p>
-            <strong>Stage 2.</strong> We train YOLOv8 detection and segmentation models with deterministic
+            <strong>Stage 2.</strong> We train YOLO detection and segmentation models with deterministic
             train/val/test splits from synthetic images.
           </p>
           <p>
@@ -111,40 +177,6 @@
       <section id="results" class="content-section">
         <div class="section-label"><span></span><p>Results</p><span></span></div>
         <h2>Results</h2>
-
-        <h3>Detection and Segmentation Comparison</h3>
-        <div class="table-wrap panel">
-          <table class="table" id="results-table">
-            <thead>
-              <tr>
-                <th>Model</th>
-                <th>Type</th>
-                <th>mAP@50</th>
-                <th>mAP@50-95</th>
-                <th>Speed (ms)</th>
-              </tr>
-            </thead>
-            <tbody id="results-body"></tbody>
-          </table>
-        </div>
-
-        <h3>Backbone Comparison</h3>
-        <div class="table-wrap panel">
-          <table class="table" id="backbone-table">
-            <thead>
-              <tr>
-                <th>Model</th>
-                <th>mAP@50</th>
-                <th>mAP@50-95</th>
-                <th>Precision</th>
-                <th>Recall</th>
-                <th>Speed (ms)</th>
-                <th>Params (M)</th>
-              </tr>
-            </thead>
-            <tbody id="backbone-body"></tbody>
-          </table>
-        </div>
 
         <h3>Cross-Dataset Pretrained 2D Detector Benchmark</h3>
         <p class="notice">
@@ -248,6 +280,12 @@
       </section>
     </main>
 
-    <script src="script.js"></script>
+    <div class="lightbox" id="lightbox" hidden>
+      <button class="lightbox-close" id="lightbox-close" aria-label="Close">&times;</button>
+      <img id="lightbox-img" alt="" />
+      <figcaption id="lightbox-caption"></figcaption>
+    </div>
+
+    <script src="script.js?v=5"></script>
   </body>
 </html>
