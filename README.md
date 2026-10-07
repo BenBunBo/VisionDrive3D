@@ -3,6 +3,9 @@
 **A 3D Rendering Pipeline for Synthetic Dataset Generation**
 
 [![GitHub Pages](https://img.shields.io/badge/GitHub%20Pages-Visit%20Project-blue?logo=github)](https://benbunbo.github.io/VisionDrive3D/)
+[![HF Dataset](https://img.shields.io/badge/%F0%9F%A4%97%20Dataset-VisionDrive3D-yellow)](https://huggingface.co/datasets/BenBunBo/VisionDrive3D)
+
+> **Dataset (Hugging Face):** [BenBunBo/VisionDrive3D](https://huggingface.co/datasets/BenBunBo/VisionDrive3D) — `VisonDrive3D_testdata.zip` (~1.1 GB): 1,000 scenes (1600×900) with RGB, depth, masks and COCO/YOLO/KITTI labels, splits train 800 / val 100 / test 100. See installation instructions on the dataset page.
 
 ---
 
@@ -53,7 +56,7 @@
 ### Step 1: Clone the Repository
 
 ```bash
-git clone https://github.com/ben-cp/VisionDrive3D.git
+git clone https://github.com/BenBunBo/VisionDrive3D.git
 cd VisionDrive3D
 ```
 
@@ -316,7 +319,22 @@ The system follows a **top-down hierarchical rendering architecture**:
 ## 🔗 Project Links
 
 - **GitHub Pages**: [https://benbunbo.github.io/VisionDrive3D/](https://benbunbo.github.io/VisionDrive3D/)
-- **GitHub Repository**: [https://github.com/benbunbo/VisionDrive3D](https://github.com/benbunbo/VisionDrive3D)
+- **GitHub Repository**: [https://github.com/BenBunBo/VisionDrive3D](https://github.com/BenBunBo/VisionDrive3D)
+- **Dataset (Hugging Face)**: [https://huggingface.co/datasets/BenBunBo/VisionDrive3D](https://huggingface.co/datasets/BenBunBo/VisionDrive3D)
+
+### Citation
+
+If you use the code or dataset from this project, please cite:
+
+```bibtex
+@misc{visiondrive3d2026,
+  title        = {VisionDrive3D: Synthetic Driving Data for Detection and Segmentation},
+  author       = {BenBunBo},
+  year         = {2026},
+  howpublished = {\url{https://github.com/BenBunBo/VisionDrive3D}},
+  note         = {Dataset: \url{https://huggingface.co/datasets/BenBunBo/VisionDrive3D}}
+}
+```
 
 ---
 
