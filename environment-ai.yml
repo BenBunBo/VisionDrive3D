@@ -28,5 +28,6 @@ dependencies:
     - tqdm
     - transformers
     - huggingface_hub
+    - scipy
 variables:
   YOLO_CONFIG_DIR: .ultralytics

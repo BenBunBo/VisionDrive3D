@@ -8,7 +8,8 @@
       "params": 2572280,
       "FLOPs": 6119244800.0,
       "n_pred": 168,
-      "ckpt": "output_dataset/ckpt/yolo26n.pt"
+      "ckpt": "output_dataset/ckpt/yolo26n.pt",
+      "input_resolution": "640 × 640"
     },
     "yolo26s": {
       "mAP50": 0.7331272020185094,
@@ -18,7 +19,8 @@
       "params": 10009784,
       "FLOPs": 22838476800.0,
       "n_pred": 212,
-      "ckpt": "output_dataset/ckpt/yolo26s.pt"
+      "ckpt": "output_dataset/ckpt/yolo26s.pt",
+      "input_resolution": "640 × 640"
     },
     "yolo26m": {
       "mAP50": 0.7288641521716084,
@@ -28,7 +30,8 @@
       "params": 21896248,
       "FLOPs": 75397529600.0,
       "n_pred": 213,
-      "ckpt": "output_dataset/ckpt/yolo26m.pt"
+      "ckpt": "output_dataset/ckpt/yolo26m.pt",
+      "input_resolution": "640 × 640"
     },
     "yolo26l": {
       "mAP50": 0.7361375955158829,
@@ -38,7 +41,8 @@
       "params": 26299704,
       "FLOPs": 93797785600.0,
       "n_pred": 214,
-      "ckpt": "output_dataset/ckpt/yolo26l.pt"
+      "ckpt": "output_dataset/ckpt/yolo26l.pt",
+      "input_resolution": "640 × 640"
     },
     "yolo26x": {
       "mAP50": 0.7277263192077963,
@@ -48,7 +52,8 @@
       "params": 58993368,
       "FLOPs": 209534054400.0,
       "n_pred": 216,
-      "ckpt": "output_dataset/ckpt/yolo26x.pt"
+      "ckpt": "output_dataset/ckpt/yolo26x.pt",
+      "input_resolution": "640 × 640"
     },
     "rtdetrv2-s": {
       "mAP50": 0.7555172093482558,
@@ -58,7 +63,8 @@
       "params": 20174608,
       "FLOPs": 62066688000.0,
       "n_pred": 250,
-      "ckpt": "output_dataset/ckpt/rtdetr_v2_r18vd"
+      "ckpt": "output_dataset/ckpt/rtdetr_v2_r18vd",
+      "input_resolution": "640 × 640"
     },
     "fasterrcnn": {
       "mAP50": 0.7753035110934201,
@@ -68,7 +74,8 @@
       "params": 43712278,
       "FLOPs": 562494546944.0,
       "n_pred": 249,
-      "ckpt": "output_dataset/ckpt/fasterrcnn_resnet50_fpn_v2_coco.pth"
+      "ckpt": "output_dataset/ckpt/fasterrcnn_resnet50_fpn_v2_coco.pth",
+      "input_resolution": "768 × 1344 (padded)"
     }
   },
   "meta": {

@@ -1,0 +1,34 @@
+{
+  "scenes": [
+    "scene_00025",
+    "scene_00046",
+    "scene_00733"
+  ],
+  "confidence": 0.25,
+  "image_size": 640,
+  "nms": false,
+  "detection_baseline": "output_dataset/ckpt/yolo26n.pt",
+  "detection_finetuned": ".mesh_cache/yolo26_qualitative/runs/detect/yolo26n_50ep_b8/weights/best.pt",
+  "segmentation_baseline": ".mesh_cache/benchmark_instance_segmentation/checkpoints/yolo26n-seg.pt",
+  "segmentation_finetuned": ".mesh_cache/yolo26_qualitative/runs/segment/yolo26n_seg_50ep_b8/weights/best.pt",
+  "images": [
+    "input_scene_00025.png",
+    "input_scene_00046.png",
+    "input_scene_00733.png",
+    "detection_baseline_scene_00025.png",
+    "detection_baseline_scene_00046.png",
+    "detection_baseline_scene_00733.png",
+    "detection_finetuned_scene_00025.png",
+    "detection_finetuned_scene_00046.png",
+    "detection_finetuned_scene_00733.png",
+    "seg_baseline_scene_00025.png",
+    "seg_baseline_scene_00046.png",
+    "seg_baseline_scene_00733.png",
+    "seg_finetuned_scene_00025.png",
+    "seg_finetuned_scene_00046.png",
+    "seg_finetuned_scene_00733.png"
+  ],
+  "epochs": 50,
+  "seed": 42,
+  "batch_requested": 8
+}

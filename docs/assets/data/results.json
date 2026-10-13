@@ -42,11 +42,15 @@
       "test": 100
     },
     "qualitative_scenes": [
-      "scene_00003",
-      "scene_00012",
-      "scene_00013",
-      "scene_00015",
-      "scene_00016"
-    ]
+      "scene_00025",
+      "scene_00046",
+      "scene_00733"
+    ],
+    "qualitative_models": {
+      "detection_baseline": "output_dataset/ckpt/yolo26n.pt",
+      "detection_finetuned": ".mesh_cache/yolo26_qualitative/runs/detect/yolo26n_50ep_b8/weights/best.pt",
+      "segmentation_baseline": ".mesh_cache/benchmark_instance_segmentation/checkpoints/yolo26n-seg.pt",
+      "segmentation_finetuned": ".mesh_cache/yolo26_qualitative/runs/segment/yolo26n_seg_50ep_b8/weights/best.pt"
+    }
   }
 }

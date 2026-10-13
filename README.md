@@ -329,7 +329,7 @@ If you use the code or dataset from this project, please cite:
 ```bibtex
 @misc{visiondrive3d2026,
   title        = {VisionDrive3D: Synthetic Driving Data for Detection and Segmentation},
-  author       = {BenBunBo},
+  author       = {Quoc Huy Nguyen, Chi Dai Le, Kim Khoi Le Nguyen},
   year         = {2026},
   howpublished = {\url{https://github.com/BenBunBo/VisionDrive3D}},
   note         = {Dataset: \url{https://huggingface.co/datasets/BenBunBo/VisionDrive3D}}

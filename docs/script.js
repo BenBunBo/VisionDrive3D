@@ -40,7 +40,10 @@ function renderQualitative(meta) {
       wrapper.className = "qual-card";
       wrapper.innerHTML = `
         <p>${card.label}</p>
-        <img src="${card.file}" alt="${card.label}" loading="lazy" />
+        <button class="qual-zoom" type="button" data-full="${card.file}"
+          data-caption="${card.label}" aria-label="View ${card.label} full size">
+          <img src="${card.file}" alt="${card.label}" loading="lazy" />
+        </button>
       `;
       row.appendChild(wrapper);
     });
@@ -51,7 +54,7 @@ function renderQualitative(meta) {
 
 async function loadResults() {
   try {
-    const response = await fetch("assets/data/results.json");
+    const response = await fetch("assets/data/results.json?v=7");
     if (!response.ok) throw new Error(`HTTP ${response.status}`);
     const data = await response.json();
 
@@ -79,6 +82,7 @@ function renderZeroShotTable(data) {
     .filter((key) => models[key])
     .map((key) => ({
       model: displayNames[key],
+      resolution: models[key].input_resolution || "-",
       map50: Number(models[key].mAP50 || 0),
       map95: Number(models[key].mAP50_95 || 0),
       fps: Number(models[key].FPS || 0),
@@ -87,7 +91,7 @@ function renderZeroShotTable(data) {
     }));
 
   if (!rows.length) {
-    body.innerHTML = '<tr><td colspan="6" class="notice">benchmark_zeroshot.json not found.</td></tr>';
+    body.innerHTML = '<tr><td colspan="7" class="notice">benchmark_zeroshot.json not found.</td></tr>';
     return;
   }
 
@@ -108,6 +112,7 @@ function renderZeroShotTable(data) {
     const tr = document.createElement("tr");
     tr.innerHTML = `
       <td>${row.model}</td>
+      <td>${row.resolution}</td>
       <td class="${getClass(getRank(row.map50, allMap50, false))}">${fmt(row.map50, 3)}</td>
       <td class="${getClass(getRank(row.map95, allMap95, false))}">${fmt(row.map95, 3)}</td>
       <td class="${getClass(getRank(row.fps, allFps, false))}">${fmt(row.fps, 1)}</td>
@@ -120,19 +125,114 @@ function renderZeroShotTable(data) {
 
 async function loadZeroShot() {
   try {
-    const response = await fetch("assets/data/benchmark_zeroshot.json");
+    const response = await fetch("assets/data/benchmark_zeroshot.json?v=6");
     if (!response.ok) throw new Error(`HTTP ${response.status}`);
     const data = await response.json();
     renderZeroShotTable(data);
   } catch (err) {
     console.error(err);
     document.getElementById("zeroshot-body").innerHTML =
-      '<tr><td colspan="6" class="notice">benchmark_zeroshot.json not found.</td></tr>';
+      '<tr><td colspan="7" class="notice">benchmark_zeroshot.json not found.</td></tr>';
+  }
+}
+
+async function loadInstanceSegmentation() {
+  const body = document.getElementById("instance-segmentation-body");
+  if (!body) return;
+  const displayNames = {
+    "yolo26n-seg": "YOLO26n-seg",
+    "yolo26s-seg": "YOLO26s-seg",
+    "yolo26m-seg": "YOLO26m-seg",
+    "yolo26l-seg": "YOLO26l-seg",
+    "yolo26x-seg": "YOLO26x-seg",
+    "mask2former-swin-t": "Mask2Former Swin-T",
+    "mask2former-swin-s": "Mask2Former Swin-S",
+  };
+  try {
+    const response = await fetch("assets/data/benchmark_instance_segmentation.json?v=6");
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    const data = await response.json();
+    body.replaceChildren();
+    const rows = Object.entries(displayNames).map(([key, name]) => {
+      const model = (data.models || {})[key] || {};
+      return {
+        name,
+        status: model.status,
+        resolution: model.input_resolution || "-",
+        box: Number(model.mAPbox_50_95),
+        mask: Number(model.mAPmask_50_95),
+        fps: Number(model.FPS || (model.time_ms ? 1000 / model.time_ms : NaN)),
+        params: Number(model.params) / 1e6,
+        flops: Number(model.FLOPs) / 1e9,
+      };
+    });
+    const rankClass = (value, values, isMinBetter = false) => {
+      const rank = getRank(value, values, isMinBetter);
+      return rank === 1 ? "best" : rank === 2 ? "second-best" : rank === 3 ? "third-best" : "";
+    };
+    const completeRows = rows.filter((row) => row.status === "complete");
+    const boxValues = completeRows.map((row) => row.box);
+    const maskValues = completeRows.map((row) => row.mask);
+    const fpsValues = completeRows.map((row) => row.fps);
+    const paramValues = completeRows.map((row) => row.params);
+    const flopValues = completeRows.map((row) => row.flops);
+    rows.forEach((item) => {
+      const tr = document.createElement("tr");
+      if (item.status !== "complete") {
+        tr.innerHTML = `<td>${item.name}</td><td>${item.resolution}</td><td colspan="5">${item.status === "error" ? "Error" : "Pending GPU benchmark"}</td>`;
+      } else {
+        tr.innerHTML = `
+          <td>${item.name}</td>
+          <td>${item.resolution}</td>
+          <td class="${rankClass(item.box, boxValues)}">${fmt(item.box, 3)}</td>
+          <td class="${rankClass(item.mask, maskValues)}">${fmt(item.mask, 3)}</td>
+          <td class="${rankClass(item.fps, fpsValues)}">${fmt(item.fps, 1)}</td>
+          <td class="${rankClass(item.params, paramValues, true)}">${fmt(item.params, 1)}</td>
+          <td class="${rankClass(item.flops, flopValues, true)}">${fmt(item.flops, 1)}</td>`;
+      }
+      body.appendChild(tr);
+    });
+  } catch (error) {
+    console.error(error);
+    body.innerHTML = '<tr><td colspan="7" class="notice">Instance segmentation benchmark data unavailable.</td></tr>';
+  }
+}
+
+async function loadYolo26Comparison() {
+  const body = document.getElementById("yolo26-comparison-body");
+  if (!body) return;
+  const versions = [
+    ["yolo26n", "baseline", "YOLO26n", "COCO baseline"],
+    ["yolo26n", "finetuned", "YOLO26n", "Fine-tuned"],
+    ["yolo26n-seg", "baseline", "YOLO26n-seg", "COCO baseline"],
+    ["yolo26n-seg", "finetuned", "YOLO26n-seg", "Fine-tuned"],
+  ];
+  try {
+    const response = await fetch("assets/data/benchmark_yolo26_finetune.json?v=8");
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    const data = await response.json();
+    body.replaceChildren();
+    versions.forEach(([key, version, name, versionName]) => {
+      const metrics = (((data || {}).models || {})[key] || {})[version];
+      const tr = document.createElement("tr");
+      const values = metrics ? [
+        metrics.mAPbox_50, metrics.mAPbox_50_95,
+        metrics.mAPmask_50, metrics.mAPmask_50_95,
+      ] : [];
+      tr.innerHTML = `<td>${name}</td><td>${versionName}</td>${values.map((value) =>
+        `<td>${value === null || value === undefined ? "—" : fmt(value, 3)}</td>`).join("")}`;
+      body.appendChild(tr);
+    });
+  } catch (error) {
+    console.error(error);
+    body.innerHTML = '<tr><td colspan="6" class="notice">YOLO26 fine-tuning comparison data unavailable.</td></tr>';
   }
 }
 
 loadResults();
 loadZeroShot();
+loadInstanceSegmentation();
+loadYolo26Comparison();
 
 // Teaser lightbox
 (function () {
@@ -155,8 +255,9 @@ loadZeroShot();
     document.body.style.overflow = "";
   }
 
-  document.querySelectorAll(".teaser-zoom").forEach((btn) => {
-    btn.addEventListener("click", () => open(btn.dataset.full, btn.dataset.caption || ""));
+  document.addEventListener("click", (event) => {
+    const btn = event.target.closest(".teaser-zoom, .qual-zoom");
+    if (btn) open(btn.dataset.full, btn.dataset.caption || "");
   });
 
   lbClose.addEventListener("click", close);

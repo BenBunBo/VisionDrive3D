@@ -189,6 +189,7 @@
             <thead>
               <tr>
                 <th>Model</th>
+                <th>Input Resolution</th>
                 <th>mAP@50</th>
                 <th>mAP@50-95</th>
                 <th>FPS</th>
@@ -200,53 +201,49 @@
           </table>
         </div>
 
-        <h3>Backbone Plot</h3>
-        <figure class="panel">
-          <img
-            src="assets/plots/backbone_comparison.png"
-            alt="Backbone comparison chart"
-            loading="lazy"
-          />
-        </figure>
-
-        <h3>Latest Inference Visuals (Contour Labels)</h3>
+        <h3>Zero-Shot Instance Segmentation (Car Only)</h3>
         <p class="notice">
-          Updated qualitative outputs from YOLOv8n-seg retraining with contour-extracted polygons.
+          COCO-pretrained models evaluated on the 100-image VisionDrive3D test split; boxes are derived from car
+          instance masks.
         </p>
-        <div class="latest-grid">
-          <figure class="panel">
-            <img
-              src="assets/images/latest/comparison_grid.png"
-              alt="Input, detection and segmentation side-by-side comparison"
-              loading="lazy"
-            />
-            <figcaption>Top scenes: RGB input vs detection vs segmentation predictions.</figcaption>
-          </figure>
-          <figure class="panel">
-            <img
-              src="assets/images/latest/segmentation_inference_demo.png"
-              alt="Segmentation inference grid"
-              loading="lazy"
-            />
-            <figcaption>Segmentation predictions on held-out test images.</figcaption>
-          </figure>
-          <figure class="panel">
-            <img
-              src="assets/images/latest/detection_inference_demo.png"
-              alt="Detection inference grid"
-              loading="lazy"
-            />
-            <figcaption>Detection predictions on held-out test images.</figcaption>
-          </figure>
-          <figure class="panel">
-            <img
-              src="assets/images/latest/yoloseg_training_curves.png"
-              alt="YOLO segmentation training curves"
-              loading="lazy"
-            />
-            <figcaption>YOLO-seg training curves from the latest contour-label run.</figcaption>
-          </figure>
+        <div class="table-wrap panel">
+          <table class="table" id="instance-segmentation-table">
+            <thead>
+              <tr>
+                <th>Model</th>
+                <th>Input Resolution</th>
+                <th>mAPbox 50-95</th>
+                <th>mAPmask 50-95</th>
+                <th>FPS</th>
+                <th>Params (M)</th>
+                <th>FLOPs (B)</th>
+              </tr>
+            </thead>
+            <tbody id="instance-segmentation-body"></tbody>
+          </table>
         </div>
+
+        <h3>YOLO26 Fine-Tuning Comparison (Car Only)</h3>
+        <p class="notice">
+          COCO baseline and VisionDrive3D fine-tuned checkpoints evaluated on the same 100-image test split;
+          inference uses confidence 0.001 and NMS disabled. Detection-only models do not report mask AP.
+        </p>
+        <div class="table-wrap panel">
+          <table class="table" id="yolo26-comparison-table">
+            <thead>
+              <tr>
+                <th>Model</th>
+                <th>Weights</th>
+                <th>mAPbox @50</th>
+                <th>mAPbox @50-95</th>
+                <th>mAPmask @50</th>
+                <th>mAPmask @50-95</th>
+              </tr>
+            </thead>
+            <tbody id="yolo26-comparison-body"></tbody>
+          </table>
+        </div>
+
       </section>
 
       <hr />
@@ -280,7 +277,7 @@
         <div class="panel bibtex-wrap">
           <pre class="bibtex"><code>@misc{visiondrive3d2026,
   title        = {VisionDrive3D: Synthetic Driving Data for Detection and Segmentation},
-  author       = {BenBunBo},
+  author       = {Quoc Huy Nguyen, Chi Dai Le, Kim Khoi Le Nguyen},
   year         = {2026},
   howpublished = {\url{https://github.com/BenBunBo/VisionDrive3D}},
   note         = {Dataset: \url{https://huggingface.co/datasets/BenBunBo/VisionDrive3D}}
@@ -295,6 +292,6 @@
       <figcaption id="lightbox-caption"></figcaption>
     </div>
 
-    <script src="script.js?v=5"></script>
+    <script src="script.js?v=8"></script>
   </body>
 </html>

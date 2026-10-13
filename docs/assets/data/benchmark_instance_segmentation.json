@@ -1,0 +1,148 @@
+{
+  "models": {
+    "yolo26n-seg": {
+      "status": "complete",
+      "mAPbox_50_95": 0.4361345529008001,
+      "mAPmask_50_95": 0.3448448658145262,
+      "time_ms": 86.06582543253899,
+      "FPS": 11.619013644199931,
+      "input_resolution": "640 \u00d7 640",
+      "timing_runs_ms": [
+        85.47743360046297,
+        85.68558150203899,
+        86.9981848495081,
+        85.8705623797141,
+        86.29736483097076
+      ],
+      "params": 2722980,
+      "FLOPs": 9758988800.0,
+      "n_predictions": 2341,
+      "checkpoint": "/home/ml4u/BKTeam/QuocHuy/VisionDrive3D/.mesh_cache/benchmark_instance_segmentation/checkpoints/yolo26n-seg.pt"
+    },
+    "yolo26s-seg": {
+      "status": "complete",
+      "mAPbox_50_95": 0.49573180842555553,
+      "mAPmask_50_95": 0.3892656857445425,
+      "time_ms": 63.09895463567227,
+      "FPS": 15.848123091323949,
+      "input_resolution": "640 \u00d7 640",
+      "timing_runs_ms": [
+        62.99608502071351,
+        63.32005996024236,
+        63.68581778835505,
+        62.372588529251516,
+        63.12022187979892
+      ],
+      "params": 10396300,
+      "FLOPs": 36737228800.0,
+      "n_predictions": 1469,
+      "checkpoint": "/home/ml4u/BKTeam/QuocHuy/VisionDrive3D/.mesh_cache/benchmark_instance_segmentation/checkpoints/yolo26s-seg.pt"
+    },
+    "yolo26m-seg": {
+      "status": "complete",
+      "mAPbox_50_95": 0.5216890487030876,
+      "mAPmask_50_95": 0.4296674808620053,
+      "time_ms": 59.88384227221832,
+      "FPS": 16.698995289150414,
+      "input_resolution": "640 \u00d7 640",
+      "timing_runs_ms": [
+        60.0426889420487,
+        61.493778398726135,
+        59.08461653860286,
+        59.44467491004616,
+        59.35345257166773
+      ],
+      "params": 23569148,
+      "FLOPs": 131572940800.0,
+      "n_predictions": 1283,
+      "checkpoint": "/home/ml4u/BKTeam/QuocHuy/VisionDrive3D/.mesh_cache/benchmark_instance_segmentation/checkpoints/yolo26m-seg.pt"
+    },
+    "yolo26l-seg": {
+      "status": "complete",
+      "mAPbox_50_95": 0.5069624377607462,
+      "mAPmask_50_95": 0.4297435129114686,
+      "time_ms": 51.54106370219961,
+      "FPS": 19.402005472334153,
+      "input_resolution": "640 \u00d7 640",
+      "timing_runs_ms": [
+        52.31029247865081,
+        51.037254489492625,
+        51.66827836073935,
+        51.009378200396895,
+        51.68011498171836
+      ],
+      "params": 27965436,
+      "FLOPs": 149820006400.0,
+      "n_predictions": 863,
+      "checkpoint": "/home/ml4u/BKTeam/QuocHuy/VisionDrive3D/.mesh_cache/benchmark_instance_segmentation/checkpoints/yolo26l-seg.pt"
+    },
+    "yolo26x-seg": {
+      "status": "complete",
+      "mAPbox_50_95": 0.47644981961348043,
+      "mAPmask_50_95": 0.417646786686904,
+      "time_ms": 61.025286715943366,
+      "FPS": 16.38664976134789,
+      "input_resolution": "640 \u00d7 640",
+      "timing_runs_ms": [
+        61.798989488743246,
+        61.46673406008631,
+        60.96887544961646,
+        59.73199862986803,
+        61.15983595140278
+      ],
+      "params": 62819132,
+      "FLOPs": 336152678400.0,
+      "n_predictions": 924,
+      "checkpoint": "/home/ml4u/BKTeam/QuocHuy/VisionDrive3D/.mesh_cache/benchmark_instance_segmentation/checkpoints/yolo26x-seg.pt"
+    },
+    "mask2former-swin-t": {
+      "status": "complete",
+      "mAPbox_50_95": 0.4592561659921275,
+      "mAPmask_50_95": 0.43320668934319956,
+      "time_ms": 631.7838112901276,
+      "timing_runs_ms": [
+        649.5278086699545,
+        657.4779129400849,
+        588.3457122603431
+      ],
+      "params": 47423179,
+      "FLOPs": 70005518336.0,
+      "n_predictions": 1514,
+      "checkpoint": "/home/ml4u/BKTeam/QuocHuy/VisionDrive3D/.mesh_cache/benchmark_instance_segmentation/checkpoints/huggingface/models--facebook--mask2former-swin-tiny-coco-instance/snapshots/22c4a2f15dc88149b8b8d9f4d42c54431fbd66f6",
+      "input_resolution": "384 \u00d7 384",
+      "FPS": 1.5828199173985804
+    },
+    "mask2former-swin-s": {
+      "status": "complete",
+      "mAPbox_50_95": 0.42897400106550004,
+      "mAPmask_50_95": 0.4185316178592067,
+      "time_ms": 495.3237584675662,
+      "timing_runs_ms": [
+        530.4638793203048,
+        412.279513371177,
+        543.2278827112168
+      ],
+      "params": 68741083,
+      "FLOPs": 97453568000.0,
+      "n_predictions": 1020,
+      "checkpoint": "/home/ml4u/BKTeam/QuocHuy/VisionDrive3D/.mesh_cache/benchmark_instance_segmentation/checkpoints/huggingface/models--facebook--mask2former-swin-small-coco-instance/snapshots/1b7ac418a0f3cb5edfc5037e488d53587b8bb76b",
+      "input_resolution": "384 \u00d7 384",
+      "FPS": 2.0188815555583326
+    }
+  },
+  "meta": {
+    "split": "test",
+    "n_images": 100,
+    "n_gt_instances": 226,
+    "device": "NVIDIA A40",
+    "precision": "FP32",
+    "confidence": 0.001,
+    "mask_threshold": 0.5,
+    "max_detections": 100,
+    "timing": "preprocess+transfer+forward+postprocess; excludes disk I/O and COCO evaluation",
+    "ground_truth_boxes": "bounding boxes derived from car instance masks",
+    "warmup_images": 10,
+    "timing_repeats": 5,
+    "status": "complete"
+  }
+}

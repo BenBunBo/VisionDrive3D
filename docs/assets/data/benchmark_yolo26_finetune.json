@@ -1,0 +1,57 @@
+{
+  "models": {
+    "yolo26n": {
+      "baseline": {
+        "mAPbox_50": 0.7869763981354908,
+        "mAPbox_50_95": 0.32764471894906566,
+        "mAPmask_50": null,
+        "mAPmask_50_95": null,
+        "n_box_predictions": 2261,
+        "n_mask_predictions": 0,
+        "checkpoint": "output_dataset/ckpt/yolo26n.pt"
+      },
+      "finetuned": {
+        "mAPbox_50": 0.9527479344949591,
+        "mAPbox_50_95": 0.8885512321061492,
+        "mAPmask_50": null,
+        "mAPmask_50_95": null,
+        "n_box_predictions": 1250,
+        "n_mask_predictions": 0,
+        "checkpoint": ".mesh_cache/yolo26_qualitative/runs/detect/yolo26n_50ep_b8/weights/best.pt"
+      }
+    },
+    "yolo26n-seg": {
+      "baseline": {
+        "mAPbox_50": 0.7664494030874484,
+        "mAPbox_50_95": 0.3229945729966118,
+        "mAPmask_50": 0.7591470103411536,
+        "mAPmask_50_95": 0.34482307411043867,
+        "n_box_predictions": 2339,
+        "n_mask_predictions": 2339,
+        "checkpoint": ".mesh_cache/benchmark_instance_segmentation/checkpoints/yolo26n-seg.pt"
+      },
+      "finetuned": {
+        "mAPbox_50": 0.7136703856217793,
+        "mAPbox_50_95": 0.3214747258355584,
+        "mAPmask_50": 0.6198614850166949,
+        "mAPmask_50_95": 0.4136087630880853,
+        "n_box_predictions": 1275,
+        "n_mask_predictions": 1275,
+        "checkpoint": ".mesh_cache/yolo26_qualitative/runs/segment/yolo26n_seg_50ep_b8/weights/best.pt"
+      }
+    }
+  },
+  "meta": {
+    "split": "test",
+    "n_images": 100,
+    "n_gt_boxes": 232,
+    "n_gt_masks": 226,
+    "class": "car",
+    "confidence": 0.001,
+    "imgsz": 640,
+    "max_detections": 100,
+    "nms": false,
+    "device": "NVIDIA A40",
+    "precision": "FP32"
+  }
+}
