@@ -202,6 +202,15 @@ class SceneOverlay:
     ):
         state_before = self._capture_gl_state()
 
+        # MaskRenderer leaves the final car's instance color in this shared
+        # shader program. Overlay geometry is background, so give it an
+        # explicit background marker before any overlay draw calls.
+        if not is_rgb:
+            GL.glUseProgram(int(shader_program.render_idx))
+            color_loc = GL.glGetUniformLocation(shader_program.render_idx, "instance_color")
+            if color_loc != -1:
+                GL.glUniform3f(color_loc, -1.0, 0.0, 0.0)
+
         # Tính khung cắt (clip_box)
         x_vals = [item["offset"][0] for item in self.corner_offsets]
         z_vals = [item["offset"][2] for item in self.corner_offsets]
@@ -228,6 +237,10 @@ class SceneOverlay:
         # 2) Vẽ nhà dân bằng shader của viewer.py
         GL.glUseProgram(int(shader_program.render_idx))
         for ent in self.building_entities:
+            if not is_rgb:
+                color_loc = GL.glGetUniformLocation(shader_program.render_idx, "instance_color")
+                if color_loc != -1:
+                    GL.glUniform3fv(color_loc, 1, np.asarray(ent.instance_color, dtype=np.float32))
             model = ent.world_matrix()
             ent.mesh.draw(projection, view, model, shader_program)
 

@@ -49,8 +49,29 @@
     "qualitative_models": {
       "detection_baseline": "output_dataset/ckpt/yolo26n.pt",
       "detection_finetuned": ".mesh_cache/yolo26_qualitative/runs/detect/yolo26n_50ep_b8/weights/best.pt",
-      "segmentation_baseline": ".mesh_cache/benchmark_instance_segmentation/checkpoints/yolo26n-seg.pt",
-      "segmentation_finetuned": ".mesh_cache/yolo26_qualitative/runs/segment/yolo26n_seg_50ep_b8/weights/best.pt"
+      "segmentation_baseline": ".mesh_cache/benchmark_yolo26_semantic/checkpoints/yolo26n-sem.pt",
+      "segmentation_finetuned": ".mesh_cache/yolo26_semantic_finetune/runs/yolo26n_sem_50ep_b8/weights/best.pt"
+    },
+    "qualitative_semantic_models": {
+      "task": "semantic",
+      "scenes": [
+        "scene_00025",
+        "scene_00046",
+        "scene_00733"
+      ],
+      "confidence": null,
+      "image_size": 640,
+      "nms": null,
+      "baseline": ".mesh_cache/benchmark_yolo26_semantic/checkpoints/yolo26n-sem.pt",
+      "finetuned": ".mesh_cache/yolo26_semantic_finetune/runs/yolo26n_sem_50ep_b8/weights/best.pt",
+      "images": [
+        "semantic_baseline_scene_00025.png",
+        "semantic_baseline_scene_00046.png",
+        "semantic_baseline_scene_00733.png",
+        "semantic_finetuned_scene_00025.png",
+        "semantic_finetuned_scene_00046.png",
+        "semantic_finetuned_scene_00733.png"
+      ]
     }
   }
 }

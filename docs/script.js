@@ -31,8 +31,8 @@ function renderQualitative(meta) {
       { label: `${stem} • RGB Input`, file: `assets/images/qualitative/input_${stem}.png` },
       { label: `${stem} • Baseline Det`, file: `assets/images/qualitative/detection_baseline_${stem}.png` },
       { label: `${stem} • Fine-tuned Det`, file: `assets/images/qualitative/detection_finetuned_${stem}.png` },
-      { label: `${stem} • Baseline Seg`, file: `assets/images/qualitative/seg_baseline_${stem}.png` },
-      { label: `${stem} • Fine-tuned Seg`, file: `assets/images/qualitative/seg_finetuned_${stem}.png` },
+      { label: `${stem} • Baseline Semantic Seg`, file: `assets/images/qualitative/semantic_baseline_${stem}.png` },
+      { label: `${stem} • Fine-tuned Semantic Seg`, file: `assets/images/qualitative/semantic_finetuned_${stem}.png` },
     ];
 
     cards.forEach((card) => {
@@ -54,7 +54,7 @@ function renderQualitative(meta) {
 
 async function loadResults() {
   try {
-    const response = await fetch("assets/data/results.json?v=7");
+    const response = await fetch("assets/data/results.json?v=8");
     if (!response.ok) throw new Error(`HTTP ${response.status}`);
     const data = await response.json();
 
@@ -136,56 +136,60 @@ async function loadZeroShot() {
   }
 }
 
-async function loadInstanceSegmentation() {
-  const body = document.getElementById("instance-segmentation-body");
+async function loadSemanticSegmentation() {
+  const body = document.getElementById("semantic-segmentation-body");
   if (!body) return;
   const displayNames = {
-    "yolo26n-seg": "YOLO26n-seg",
-    "yolo26s-seg": "YOLO26s-seg",
-    "yolo26m-seg": "YOLO26m-seg",
-    "yolo26l-seg": "YOLO26l-seg",
-    "yolo26x-seg": "YOLO26x-seg",
-    "mask2former-swin-t": "Mask2Former Swin-T",
-    "mask2former-swin-s": "Mask2Former Swin-S",
+    "yolo26n-sem": "YOLO26n-sem",
+    "yolo26s-sem": "YOLO26s-sem",
+    "yolo26m-sem": "YOLO26m-sem",
+    "yolo26l-sem": "YOLO26l-sem",
+    "yolo26x-sem": "YOLO26x-sem",
   };
   try {
-    const response = await fetch("assets/data/benchmark_instance_segmentation.json?v=6");
+    const response = await fetch("assets/data/benchmark_semantic_segmentation.json?v=1");
     if (!response.ok) throw new Error(`HTTP ${response.status}`);
     const data = await response.json();
     body.replaceChildren();
+    const numeric = (value) => value === null || value === undefined ? NaN : Number(value);
     const rows = Object.entries(displayNames).map(([key, name]) => {
       const model = (data.models || {})[key] || {};
       return {
         name,
         status: model.status,
         resolution: model.input_resolution || "-",
-        box: Number(model.mAPbox_50_95),
-        mask: Number(model.mAPmask_50_95),
-        fps: Number(model.FPS || (model.time_ms ? 1000 / model.time_ms : NaN)),
-        params: Number(model.params) / 1e6,
-        flops: Number(model.FLOPs) / 1e9,
+        carIou: numeric(model.car_iou),
+        carDice: numeric(model.car_dice),
+        miou: numeric(model.miou),
+        fps: numeric(model.FPS || (model.time_ms ? 1000 / model.time_ms : null)),
+        params: numeric(model.params) / 1e6,
+        flops: numeric(model.FLOPs) / 1e9,
       };
     });
     const rankClass = (value, values, isMinBetter = false) => {
+      if (!Number.isFinite(value)) return "";
       const rank = getRank(value, values, isMinBetter);
       return rank === 1 ? "best" : rank === 2 ? "second-best" : rank === 3 ? "third-best" : "";
     };
     const completeRows = rows.filter((row) => row.status === "complete");
-    const boxValues = completeRows.map((row) => row.box);
-    const maskValues = completeRows.map((row) => row.mask);
-    const fpsValues = completeRows.map((row) => row.fps);
-    const paramValues = completeRows.map((row) => row.params);
-    const flopValues = completeRows.map((row) => row.flops);
+    const validValues = (key) => completeRows.map((row) => row[key]).filter(Number.isFinite);
+    const carIouValues = validValues("carIou");
+    const carDiceValues = validValues("carDice");
+    const miouValues = validValues("miou");
+    const fpsValues = validValues("fps");
+    const paramValues = validValues("params");
+    const flopValues = validValues("flops");
     rows.forEach((item) => {
       const tr = document.createElement("tr");
       if (item.status !== "complete") {
-        tr.innerHTML = `<td>${item.name}</td><td>${item.resolution}</td><td colspan="5">${item.status === "error" ? "Error" : "Pending GPU benchmark"}</td>`;
+        tr.innerHTML = `<td>${item.name}</td><td>${item.resolution}</td><td colspan="6">${item.status === "error" ? "Error" : "Pending GPU benchmark"}</td>`;
       } else {
         tr.innerHTML = `
           <td>${item.name}</td>
           <td>${item.resolution}</td>
-          <td class="${rankClass(item.box, boxValues)}">${fmt(item.box, 3)}</td>
-          <td class="${rankClass(item.mask, maskValues)}">${fmt(item.mask, 3)}</td>
+          <td class="${rankClass(item.carIou, carIouValues)}">${fmt(item.carIou, 3)}</td>
+          <td class="${rankClass(item.carDice, carDiceValues)}">${fmt(item.carDice, 3)}</td>
+          <td class="${rankClass(item.miou, miouValues)}">${fmt(item.miou, 3)}</td>
           <td class="${rankClass(item.fps, fpsValues)}">${fmt(item.fps, 1)}</td>
           <td class="${rankClass(item.params, paramValues, true)}">${fmt(item.params, 1)}</td>
           <td class="${rankClass(item.flops, flopValues, true)}">${fmt(item.flops, 1)}</td>`;
@@ -194,7 +198,7 @@ async function loadInstanceSegmentation() {
     });
   } catch (error) {
     console.error(error);
-    body.innerHTML = '<tr><td colspan="7" class="notice">Instance segmentation benchmark data unavailable.</td></tr>';
+    body.innerHTML = '<tr><td colspan="8" class="notice">Semantic segmentation benchmark data unavailable.</td></tr>';
   }
 }
 
@@ -202,36 +206,36 @@ async function loadYolo26Comparison() {
   const body = document.getElementById("yolo26-comparison-body");
   if (!body) return;
   const versions = [
-    ["yolo26n", "baseline", "YOLO26n", "COCO baseline"],
-    ["yolo26n", "finetuned", "YOLO26n", "Fine-tuned"],
-    ["yolo26n-seg", "baseline", "YOLO26n-seg", "COCO baseline"],
-    ["yolo26n-seg", "finetuned", "YOLO26n-seg", "Fine-tuned"],
+    ["yolo26n", "baseline", "YOLO26n", "Detection", "COCO baseline"],
+    ["yolo26n", "finetuned", "YOLO26n", "Detection", "Fine-tuned"],
+    ["yolo26n-sem", "baseline", "YOLO26n-sem", "Semantic segmentation", "Cityscapes baseline"],
+    ["yolo26n-sem", "finetuned", "YOLO26n-sem", "Semantic segmentation", "Fine-tuned"],
   ];
   try {
-    const response = await fetch("assets/data/benchmark_yolo26_finetune.json?v=8");
+    const response = await fetch("assets/data/benchmark_yolo26_finetune.json?v=9");
     if (!response.ok) throw new Error(`HTTP ${response.status}`);
     const data = await response.json();
     body.replaceChildren();
-    versions.forEach(([key, version, name, versionName]) => {
+    versions.forEach(([key, version, name, task, versionName]) => {
       const metrics = (((data || {}).models || {})[key] || {})[version];
       const tr = document.createElement("tr");
       const values = metrics ? [
         metrics.mAPbox_50, metrics.mAPbox_50_95,
-        metrics.mAPmask_50, metrics.mAPmask_50_95,
+        metrics.car_iou, metrics.car_dice, metrics.miou,
       ] : [];
-      tr.innerHTML = `<td>${name}</td><td>${versionName}</td>${values.map((value) =>
+      tr.innerHTML = `<td>${name}</td><td>${task}</td><td>${versionName}</td>${values.map((value) =>
         `<td>${value === null || value === undefined ? "—" : fmt(value, 3)}</td>`).join("")}`;
       body.appendChild(tr);
     });
   } catch (error) {
     console.error(error);
-    body.innerHTML = '<tr><td colspan="6" class="notice">YOLO26 fine-tuning comparison data unavailable.</td></tr>';
+    body.innerHTML = '<tr><td colspan="8" class="notice">YOLO26 fine-tuning comparison data unavailable.</td></tr>';
   }
 }
 
 loadResults();
 loadZeroShot();
-loadInstanceSegmentation();
+loadSemanticSegmentation();
 loadYolo26Comparison();
 
 // Teaser lightbox

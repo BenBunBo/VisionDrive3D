@@ -201,25 +201,26 @@
           </table>
         </div>
 
-        <h3>Zero-Shot Instance Segmentation (Car Only)</h3>
+        <h3>Zero-Shot Semantic Segmentation (Car Only)</h3>
         <p class="notice">
-          COCO-pretrained models evaluated on the 100-image VisionDrive3D test split; boxes are derived from car
-          instance masks.
+          Cityscapes-pretrained YOLO26-sem models evaluated on the same 100-image VisionDrive3D test split.
+          Metrics evaluate car and background pixel classes.
         </p>
         <div class="table-wrap panel">
-          <table class="table" id="instance-segmentation-table">
+          <table class="table" id="semantic-segmentation-table">
             <thead>
               <tr>
                 <th>Model</th>
                 <th>Input Resolution</th>
-                <th>mAPbox 50-95</th>
-                <th>mAPmask 50-95</th>
+                <th>Car IoU</th>
+                <th>Car Dice</th>
+                <th>mIoU</th>
                 <th>FPS</th>
                 <th>Params (M)</th>
-                <th>FLOPs (B)</th>
+                <th>FLOPs (G)</th>
               </tr>
             </thead>
-            <tbody id="instance-segmentation-body"></tbody>
+            <tbody id="semantic-segmentation-body"></tbody>
           </table>
         </div>
 
@@ -233,11 +234,13 @@
             <thead>
               <tr>
                 <th>Model</th>
+                <th>Task</th>
                 <th>Weights</th>
                 <th>mAPbox @50</th>
                 <th>mAPbox @50-95</th>
-                <th>mAPmask @50</th>
-                <th>mAPmask @50-95</th>
+                <th>Car IoU</th>
+                <th>Car Dice</th>
+                <th>mIoU</th>
               </tr>
             </thead>
             <tbody id="yolo26-comparison-body"></tbody>

@@ -1,0 +1,223 @@
+{
+  "models": {
+    "yolo26n-sem": {
+      "background_iou": 0.9959152376727455,
+      "car_iou": 0.8708201357415009,
+      "car_dice": 0.9309501422448082,
+      "miou": 0.9333676867071232,
+      "pixel_accuracy": 0.9960247013888889,
+      "confusion_matrix_gt_rows_pred_columns": [
+        [
+          139568636,
+          318254
+        ],
+        [
+          254189,
+          3858921
+        ]
+      ],
+      "status": "complete",
+      "task": "semantic",
+      "class": "car",
+      "input_resolution": "640 \u00d7 640",
+      "n_images": 100,
+      "time_ms": 19.28396505350247,
+      "timing_runs_ms": [
+        22.114523369818926,
+        18.882666588760912,
+        18.426257888786495,
+        18.76769680995494,
+        18.228680610191077
+      ],
+      "FPS": 51.85655528961737,
+      "checkpoint": ".mesh_cache/benchmark_yolo26_semantic/checkpoints/yolo26n-sem.pt",
+      "params": 1632902,
+      "FLOPs": 4441804800.0
+    },
+    "yolo26s-sem": {
+      "background_iou": 0.9968442347180284,
+      "car_iou": 0.8997484603176188,
+      "car_dice": 0.9472290454360363,
+      "miou": 0.9482963475178237,
+      "pixel_accuracy": 0.9969311527777778,
+      "confusion_matrix_gt_rows_pred_columns": [
+        [
+          139591948,
+          294942
+        ],
+        [
+          146972,
+          3966138
+        ]
+      ],
+      "status": "complete",
+      "task": "semantic",
+      "class": "car",
+      "input_resolution": "640 \u00d7 640",
+      "n_images": 100,
+      "time_ms": 18.749999712686986,
+      "timing_runs_ms": [
+        18.692344380542636,
+        18.807010650634766,
+        18.872329171281308,
+        18.793622851371765,
+        18.584691509604454
+      ],
+      "FPS": 53.333334150579255,
+      "checkpoint": ".mesh_cache/benchmark_yolo26_semantic/checkpoints/yolo26s-sem.pt",
+      "params": 6503142,
+      "FLOPs": 17350860800.0
+    },
+    "yolo26m-sem": {
+      "background_iou": 0.9968681026285878,
+      "car_iou": 0.9002727422591336,
+      "car_dice": 0.9475195031096926,
+      "miou": 0.9485704224438607,
+      "pixel_accuracy": 0.9969542152777778,
+      "confusion_matrix_gt_rows_pred_columns": [
+        [
+          139602075,
+          284815
+        ],
+        [
+          153778,
+          3959332
+        ]
+      ],
+      "status": "complete",
+      "task": "semantic",
+      "class": "car",
+      "input_resolution": "640 \u00d7 640",
+      "n_images": 100,
+      "time_ms": 23.84194847056642,
+      "timing_runs_ms": [
+        24.161645451094955,
+        23.521797021385282,
+        24.466061850544065,
+        23.49141741869971,
+        23.568820611108094
+      ],
+      "FPS": 41.94288068504674,
+      "checkpoint": ".mesh_cache/benchmark_yolo26_semantic/checkpoints/yolo26m-sem.pt",
+      "params": 14317670,
+      "FLOPs": 59474124800.0
+    },
+    "yolo26l-sem": {
+      "background_iou": 0.9971534372142254,
+      "car_iou": 0.909141725758486,
+      "car_dice": 0.952408837429072,
+      "miou": 0.9531475814863557,
+      "pixel_accuracy": 0.9972322708333333,
+      "confusion_matrix_gt_rows_pred_columns": [
+        [
+          139613465,
+          273425
+        ],
+        [
+          125128,
+          3987982
+        ]
+      ],
+      "status": "complete",
+      "task": "semantic",
+      "class": "car",
+      "input_resolution": "640 \u00d7 640",
+      "n_images": 100,
+      "time_ms": 27.532016814220697,
+      "timing_runs_ms": [
+        27.347856850828975,
+        27.37202712101862,
+        28.009031689725816,
+        27.558396980166435,
+        27.372771429363638
+      ],
+      "FPS": 36.3213493129746,
+      "checkpoint": ".mesh_cache/benchmark_yolo26_semantic/checkpoints/yolo26l-sem.pt",
+      "params": 17867110,
+      "FLOPs": 75134976000.0
+    },
+    "yolo26x-sem": {
+      "background_iou": 0.9975851481148701,
+      "car_iou": 0.9219003950012705,
+      "car_dice": 0.9593633441140544,
+      "miou": 0.9597427715580703,
+      "pixel_accuracy": 0.9976520763888889,
+      "confusion_matrix_gt_rows_pred_columns": [
+        [
+          139670900,
+          215990
+        ],
+        [
+          122111,
+          3990999
+        ]
+      ],
+      "status": "complete",
+      "task": "semantic",
+      "class": "car",
+      "input_resolution": "640 \u00d7 640",
+      "n_images": 100,
+      "time_ms": 36.750482788309455,
+      "timing_runs_ms": [
+        36.689349920488894,
+        36.74759746994823,
+        36.8889082595706,
+        36.551860321778804,
+        36.874697969760746
+      ],
+      "FPS": 27.21052688641429,
+      "checkpoint": ".mesh_cache/benchmark_yolo26_semantic/checkpoints/yolo26x-sem.pt",
+      "params": 40157702,
+      "FLOPs": 168303206400.0
+    },
+    "yolo26n-sem-finetuned": {
+      "background_iou": 0.9984582575878995,
+      "car_iou": 0.9485161109689476,
+      "car_dice": 0.973577899232534,
+      "miou": 0.9734871842784236,
+      "pixel_accuracy": 0.9985008402777777,
+      "confusion_matrix_gt_rows_pred_columns": [
+        [
+          139806863,
+          80027
+        ],
+        [
+          135852,
+          3977258
+        ]
+      ],
+      "status": "complete",
+      "task": "semantic",
+      "class": "car",
+      "input_resolution": "640 \u00d7 640",
+      "n_images": 100,
+      "time_ms": 17.35159287462011,
+      "timing_runs_ms": [
+        17.427492521237582,
+        17.186084690038115,
+        17.143316259607673,
+        17.391346250660717,
+        17.609724651556462
+      ],
+      "FPS": 57.63159654712067,
+      "checkpoint": ".mesh_cache/yolo26_semantic_finetune/runs/yolo26n_sem_50ep_b8/weights/best.pt",
+      "params": 1630692,
+      "FLOPs": 4427878400.0
+    }
+  },
+  "meta": {
+    "task": "semantic segmentation",
+    "class": "car",
+    "background_id": 0,
+    "car_id": 1,
+    "split": "test",
+    "n_images": 100,
+    "imgsz": 640,
+    "rect": false,
+    "warmup_images": 10,
+    "timing_repeats": 5,
+    "precision": "FP32",
+    "device": "NVIDIA A40",
+    "dataset": ".mesh_cache/semantic_dataset_v1/dataset.yaml"
+  }
+}
