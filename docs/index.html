@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>VisionDrive3D: Synthetic Driving Data for Detection & Segmentation</title>
-    <link rel="stylesheet" href="styles.css?v=4" />
+    <link rel="stylesheet" href="styles.css?v=5" />
   </head>
   <body>
     <main class="page">
@@ -292,9 +292,19 @@
     <div class="lightbox" id="lightbox" hidden>
       <button class="lightbox-close" id="lightbox-close" aria-label="Close">&times;</button>
       <img id="lightbox-img" alt="" />
+      <div class="lightbox-pair" id="lightbox-pair" hidden>
+        <figure>
+          <img id="lightbox-baseline-img" alt="Baseline result" />
+          <figcaption>Baseline</figcaption>
+        </figure>
+        <figure>
+          <img id="lightbox-finetuned-img" alt="Fine-tuned result" />
+          <figcaption>Fine-tuned</figcaption>
+        </figure>
+      </div>
       <figcaption id="lightbox-caption"></figcaption>
     </div>
 
-    <script src="script.js?v=8"></script>
+    <script src="script.js?v=9"></script>
   </body>
 </html>

@@ -26,26 +26,63 @@ function renderQualitative(meta) {
   scenes.forEach((stem) => {
     const row = document.createElement("div");
     row.className = "qual-row";
+    const heading = document.createElement("h3");
+    heading.className = "qual-scene-title";
+    heading.textContent = stem;
+    row.appendChild(heading);
 
-    const cards = [
-      { label: `${stem} • RGB Input`, file: `assets/images/qualitative/input_${stem}.png` },
-      { label: `${stem} • Baseline Det`, file: `assets/images/qualitative/detection_baseline_${stem}.png` },
-      { label: `${stem} • Fine-tuned Det`, file: `assets/images/qualitative/detection_finetuned_${stem}.png` },
-      { label: `${stem} • Baseline Semantic Seg`, file: `assets/images/qualitative/semantic_baseline_${stem}.png` },
-      { label: `${stem} • Fine-tuned Semantic Seg`, file: `assets/images/qualitative/semantic_finetuned_${stem}.png` },
+    const comparisons = [
+      {
+        label: "Detection",
+        baseline: `assets/images/qualitative/detection_baseline_${stem}.png`,
+        finetuned: `assets/images/qualitative/detection_finetuned_${stem}.png`,
+      },
+      {
+        label: "Segmentation",
+        baseline: `assets/images/qualitative/semantic_baseline_${stem}.png`,
+        finetuned: `assets/images/qualitative/semantic_finetuned_${stem}.png`,
+      },
     ];
 
-    cards.forEach((card) => {
-      const wrapper = document.createElement("div");
-      wrapper.className = "qual-card";
-      wrapper.innerHTML = `
-        <p>${card.label}</p>
-        <button class="qual-zoom" type="button" data-full="${card.file}"
-          data-caption="${card.label}" aria-label="View ${card.label} full size">
-          <img src="${card.file}" alt="${card.label}" loading="lazy" />
-        </button>
-      `;
-      row.appendChild(wrapper);
+    comparisons.forEach((comparison) => {
+      const card = document.createElement("section");
+      card.className = "qual-card";
+
+      const title = document.createElement("h4");
+      title.textContent = comparison.label;
+      card.appendChild(title);
+
+      const pair = document.createElement("div");
+      pair.className = "qual-preview-pair";
+      [
+        { label: "Baseline", file: comparison.baseline },
+        { label: "Fine-tuned", file: comparison.finetuned },
+      ].forEach((result) => {
+        const item = document.createElement("div");
+        item.className = "qual-result";
+
+        const resultLabel = document.createElement("p");
+        resultLabel.textContent = result.label;
+        item.appendChild(resultLabel);
+
+        const button = document.createElement("button");
+        button.className = "qual-zoom";
+        button.type = "button";
+        button.dataset.pairBaseline = comparison.baseline;
+        button.dataset.pairFinetuned = comparison.finetuned;
+        button.dataset.pairTitle = `${comparison.label} — ${stem}`;
+        button.setAttribute("aria-label", `Compare ${comparison.label} baseline and fine-tuned results for ${stem}`);
+
+        const image = document.createElement("img");
+        image.src = result.file;
+        image.alt = `${comparison.label} ${result.label.toLowerCase()} result`;
+        image.loading = "lazy";
+        button.appendChild(image);
+        item.appendChild(button);
+        pair.appendChild(item);
+      });
+      card.appendChild(pair);
+      row.appendChild(card);
     });
 
     grid.appendChild(row);
@@ -243,12 +280,27 @@ loadYolo26Comparison();
   const lightbox = document.getElementById("lightbox");
   const lbImg = document.getElementById("lightbox-img");
   const lbCaption = document.getElementById("lightbox-caption");
+  const lbPair = document.getElementById("lightbox-pair");
+  const lbBaselineImg = document.getElementById("lightbox-baseline-img");
+  const lbFinetunedImg = document.getElementById("lightbox-finetuned-img");
   const lbClose = document.getElementById("lightbox-close");
-  if (!lightbox || !lbImg || !lbCaption || !lbClose) return;
+  if (!lightbox || !lbImg || !lbCaption || !lbPair || !lbBaselineImg || !lbFinetunedImg || !lbClose) return;
 
   function open(src, caption) {
+    lbPair.hidden = true;
+    lbImg.hidden = false;
     lbImg.src = src;
     lbImg.alt = caption;
+    lbCaption.textContent = caption;
+    lightbox.hidden = false;
+    document.body.style.overflow = "hidden";
+  }
+
+  function openPair(baseline, finetuned, caption) {
+    lbImg.hidden = true;
+    lbPair.hidden = false;
+    lbBaselineImg.src = baseline;
+    lbFinetunedImg.src = finetuned;
     lbCaption.textContent = caption;
     lightbox.hidden = false;
     document.body.style.overflow = "hidden";
@@ -261,7 +313,12 @@ loadYolo26Comparison();
 
   document.addEventListener("click", (event) => {
     const btn = event.target.closest(".teaser-zoom, .qual-zoom");
-    if (btn) open(btn.dataset.full, btn.dataset.caption || "");
+    if (!btn) return;
+    if (btn.dataset.pairBaseline && btn.dataset.pairFinetuned) {
+      openPair(btn.dataset.pairBaseline, btn.dataset.pairFinetuned, btn.dataset.pairTitle || "");
+    } else {
+      open(btn.dataset.full, btn.dataset.caption || "");
+    }
   });
 
   lbClose.addEventListener("click", close);
